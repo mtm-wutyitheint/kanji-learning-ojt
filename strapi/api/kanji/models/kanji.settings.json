@@ -1,0 +1,68 @@
+{
+  "kind": "collectionType",
+  "collectionName": "kanjis",
+  "info": {
+    "name": "Kanji",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "kanji": {
+      "type": "string",
+      "required": true
+    },
+    "meaning": {
+      "type": "string",
+      "required": true
+    },
+    "furigana": {
+      "type": "string",
+      "required": true
+    },
+    "romaji": {
+      "type": "string",
+      "required": true
+    },
+    "logoPicture": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "examplePicture": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "sampleText1": {
+      "type": "text"
+    },
+    "sampleText2": {
+      "type": "text"
+    },
+    "sampleText3": {
+      "type": "text"
+    },
+    "sampleText4": {
+      "type": "text"
+    }
+  }
+}
