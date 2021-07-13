@@ -20,13 +20,13 @@
       "type": "string",
       "required": true
     },
-    "furigana": {
+    "onyomi": {
       "type": "string",
-      "required": true
+      "required": false
     },
-    "romaji": {
+    "onRomaji": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "logoPicture": {
       "collection": "file",
@@ -63,6 +63,12 @@
     },
     "sampleText4": {
       "type": "text"
+    },
+    "kunyomi": {
+      "type": "string"
+    },
+    "kunRomaji": {
+      "type": "string"
     }
   }
 }
