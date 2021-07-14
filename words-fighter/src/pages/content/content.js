@@ -12,21 +12,27 @@ function Content() {
       </div>
       <div className="content-section">
         <div className="main-section">
-          <Link to="/comming-soon">
-            <div className="section section-first">
-              <p>Learn</p>
-            </div>
-          </Link>
-          <Link to="/comming-soon">
-            <div className="section">
-              <p>Quiz</p>
-            </div>
-          </Link>
-          <Link to="/comming-soon">
-            <div className="section section-last">
-              <p>Game</p>
-            </div>
-          </Link>
+          <div className="section">
+            <Link to="/comming-soon">
+              <div className="link">
+                <p>Learn</p>
+              </div>
+            </Link>
+          </div>
+          <div className="section">
+            <Link to="/comming-soon">
+              <div className="link">
+                <p>Quiz</p>
+              </div>
+            </Link>
+          </div>
+          <div className="section">
+            <Link to="/comming-soon">
+              <div className="link">
+                <p>Game</p>
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
