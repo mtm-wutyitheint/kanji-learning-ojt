@@ -50,7 +50,7 @@
     },
     {
       "method": "POST",
-      "path": "/kanjis",
+      "path": "/kanjis/import",
       "handler": "kanji.importKanji",
       "config": {
         "policies": []
