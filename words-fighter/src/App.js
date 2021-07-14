@@ -4,8 +4,9 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-import CommingSoon from "./pages/comming-soon/comming-soon";
-import Content from './pages/content/content';
+import CommingSoon from "./pages/comming-soon";
+import Content from './pages/content';
+import Learn from "./pages/learn";
 import Top from './pages/top/top';
 
 function App() {
@@ -20,6 +21,9 @@ function App() {
         </Route>
         <Route path="/top">
           <Top />
+        </Route>
+        <Route path="/learn">
+          <Learn />
         </Route>
         <Route path="/">
           <Redirect to="/top"></Redirect>

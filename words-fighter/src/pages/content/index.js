@@ -13,7 +13,7 @@ function Content() {
       <div className="content-section">
         <div className="main-section">
           <div className="section">
-            <Link to="/comming-soon">
+            <Link to="/learn">
               <div className="link">
                 <p>Learn</p>
               </div>
