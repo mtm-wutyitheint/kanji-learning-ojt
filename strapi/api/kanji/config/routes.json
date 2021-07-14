@@ -47,6 +47,14 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "POST",
+      "path": "/kanjis",
+      "handler": "kanji.importKanji",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

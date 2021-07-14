@@ -5,4 +5,8 @@
  * to customize this service
  */
 
-module.exports = {};
+module.exports = {
+    isDuplicated: async (word) => {
+        return await strapi.services.kanji.count({ kanji: word }) > 0;
+    }
+};
