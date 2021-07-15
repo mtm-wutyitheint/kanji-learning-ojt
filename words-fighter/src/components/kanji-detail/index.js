@@ -3,9 +3,11 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import kanjiPic from '../../img/kanji.png';
+import './kanji-detail-dialog.scss';
+import _ from 'lodash';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -21,9 +23,10 @@ export default function KanjiDetail(props) {
       return list.id === index;
     })
   }
-  console.log(showList);
+  let currentIndex = _.findIndex(data, d => d.id === index);
+  let pageCount = String(currentIndex + 1) + "/" + String(data.length)
 
-  const mock = showList.length === 0 ? null : showList[0];
+  let mock = showList.length === 0 ? null : showList[0];
   return (
     <div>
       {mock ?
@@ -35,18 +38,43 @@ export default function KanjiDetail(props) {
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle id="alert-dialog-slide-title">{mock.kanji}</DialogTitle>
+          <DialogTitle id="alert-dialog-slide-title">{mock.kanji} [ {mock.kunRomaji} ]</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              {mock.meaning}
-            </DialogContentText>
+            <div className="clearFix">
+              <ul className="meaning-lst">
+                <li>Meaning</li>
+                <ul>
+                  <li>{mock.meaning}</li>
+                </ul>
+                <li>Onyomi</li>
+                <ul>
+                  <li>{mock.onyomi}</li>
+                  <li>{mock.onRomaji}</li>
+                </ul>
+                <li>Kunyomi</li>
+                <ul>
+                  <li>{mock.kunyomi}</li>
+                  <li>{mock.kunRomaji}</li>
+                </ul>
+                <li>Examples</li>
+                <ul>
+                  <li>This is an example text.</li>
+                  <li>This is an example text.</li>
+                </ul>
+              </ul>
+              <img className="kanji-example" src={kanjiPic} alt={mock.kunRomaji}></img>
+            </div>
+            <p className="page-count">
+              {pageCount}
+            </p>
+
           </DialogContent>
           <DialogActions>
             <Button onClick={close} color="primary">
               close
             </Button>
           </DialogActions>
-        </Dialog> : <h1>No Data Found</h1>}
+        </Dialog> : <div></div>}
     </div>
   );
 }
