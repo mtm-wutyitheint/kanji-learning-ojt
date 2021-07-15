@@ -1,0 +1,49 @@
+.clearFix:after {
+  content: "";
+  display: block;
+  clear: both;
+  height: 0;
+  font-size: 0;
+  visibility: hidden;
+}
+.MuiTypography-h6 {
+  font-size: 30px !important;
+  font-weight: bold !important;
+}
+.kanji-example {
+  float: left;
+  width: 40%;
+}
+.meaning-lst {
+  float: left;
+  width: 50%;
+  font-size: 18px;
+}
+li {
+  margin: 10px;
+}
+.page-count {
+  width: 100%;
+  display: block;
+  text-align: center;
+  .arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+  }
+  span{
+    margin: 0 20px;
+    padding: 7px;
+    border-radius: 30%;
+    cursor: pointer;
+  }
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+  .left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+  }
+}
