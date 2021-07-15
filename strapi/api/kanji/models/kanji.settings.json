@@ -69,6 +69,10 @@
     },
     "kunRomaji": {
       "type": "string"
+    },
+    "level": {
+      "type": "string",
+      "required": true
     }
   }
 }
