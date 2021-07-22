@@ -20,7 +20,7 @@ function Content() {
             </Link>
           </div>
           <div className="section">
-            <Link to="/comming-soon">
+            <Link to="/quiz">
               <div className="link">
                 <p>Quiz</p>
               </div>

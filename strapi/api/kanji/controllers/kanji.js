@@ -42,7 +42,12 @@ module.exports = {
         return ctx.send({ message: 'No data in kanji table' }, 400);
       }
       const meaning_list = _.map(entities, entity => {
-        return entity.meaning;
+        return {
+          meaning: entity.meaning,
+          ischoose: false,
+          isCorrect: false,
+          disable: false
+        };
       });
       const randomMeaning = strapi.services.kanji.getRandom(entities, 30);
       if (isNil(randomMeaning)) {
@@ -53,22 +58,27 @@ module.exports = {
       }
       await Promise.all(randomMeaning.map(word => {
         let meanings = _.cloneDeep(meaning_list);
-        meanings = _.filter(meaning_list, m => m !== word.meaning);
+        meanings = _.filter(meaning_list, m => m.meaning !== word.meaning);
         let answer_list = strapi.services.kanji.getRandom(meanings, 5)
-        answer_list.push(word.meaning);
+        answer_list.push({
+          meaning: word.meaning,
+          ischoose: false,
+          isCorrect: false,
+          disable: false
+        });
         answer_list = strapi.services.kanji.shuffle(answer_list);
         const quiz = {
           kanji: word.kanji,
           correct: word.meaning,
           answer_list
         }
-        console.log(quiz);
         quizs.push(quiz);
       }))
+      // console.log(quizs)
       return quizs;
     }
-    catch(error) {
-      console.log('=========== Error in quiz ========');
+    catch (error) {
+      console.log('=========== Error in quizAnswerWithMeaning ========');
       console.error(error);
     }
   },
@@ -101,13 +111,12 @@ module.exports = {
           correct: word.kanji,
           answer_list
         }
-        console.log(quiz);
         quizs.push(quiz);
       }))
       return quizs;
     }
-    catch(error) {
-      console.log('=========== Error in quiz ========');
+    catch (error) {
+      console.log('=========== Error in quizAnswerWithKanji ========');
       console.error(error);
     }
   }
