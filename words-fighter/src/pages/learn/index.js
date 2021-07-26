@@ -2,64 +2,38 @@ import React from 'react';
 import kanjiPic from '../../img/kanji.png';
 import "./learn.scss";
 import KanjiDetail from '../../components/kanji-detail';
+import { withRouter } from 'react-router-dom';
 
 class Learn extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {
       dialogOpen: false,
       selectedIndex: null,
-      data: [
-        {
-          id: 1,
-          kanji: "日",
-          meaning: "Day",
-          onyomi: "ニチ, ジツ",
-          kunyomi: "ひ, -び, -か",
-          onRomaji: "nichi, jitsu",
-          kunRomaji: "hi, -bi, -ka"
-        },
-        {
-          id: 2,
-          kanji: "一",
-          meaning: "one",
-          onyomi: "イチ",
-          kunyomi: "ひと(つ)",
-          onRomaji: "ichi",
-          kunRomaji: "hito(tsu)"
-        },
-        {
-          id: 3,
-          kanji: "国",
-          meaning: "country",
-          onyomi: "コク",
-          kunyomi: "くに",
-          onRomaji: "koku",
-          kunRomaji: "kuni"
-        },
-        {
-          id: 4,
-          kanji: "人",
-          meaning: "Person",
-          onyomi: "ジン、 ニン",
-          kunyomi: "ひと",
-          onRomaji: "jin, nin",
-          kunRomaji: "hito"
-        },
-        {
-          id: 5,
-          kanji: "年",
-          meaning: "years",
-          onyomi: "ネン",
-          kunyomi: "とし",
-          onRomaji: "toshi",
-          kunRomaji: "hito"
-        }
-      ]
+      data: []
     }
-    this.kind = 'N5';
+    const { level } = this.props.location.state;
+    this.kind = level;
     // this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
+  }
+  
+  componentDidMount(){
+    const apiUrl = 'http://localhost:1337/kanjis';
+    const { level } = this.props.location.state;
+    const arrData = [];
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        data.forEach(element => {
+          if(element.level === level){
+            arrData.push(element);
+          }
+        });
+        this.setState({data: arrData})
+      })
+      .catch((error) => console.log(error));
   }
   openDialog(id) {
     this.setState({ dialogOpen: true, selectedIndex: id });
@@ -108,4 +82,4 @@ class Learn extends React.Component {
   }
 }
 
-export default Learn;
+export default withRouter(Learn);

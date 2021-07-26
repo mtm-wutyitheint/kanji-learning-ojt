@@ -13,12 +13,23 @@ function Top() {
         <div className="top-text">
           <img className="choose-img" src={topText} alt="Choose"></img>
           <div className="level">
-            <Link className="no-link" to="/content">
+            <Link className="no-link" 
+            to={{
+              pathname: "/content",
+              state: {
+                level: 'N4',
+              },
+            }}>
               <button className="level-btn no-link">N4</button>
             </Link>
           </div>
           <div className="level">
-            <Link className="no-link" to="/content">
+            <Link className="no-link" to={{
+              pathname: "/content",
+              state: {
+                level: 'N5',
+              },
+            }}>
               <button className="level-btn no-link">N5</button>
             </Link>
           </div>
