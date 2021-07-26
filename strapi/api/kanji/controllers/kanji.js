@@ -1,7 +1,7 @@
 'use strict';
 const { sanitizeEntity } = require('strapi-utils');
 const _ = require('lodash');
-const { isNil, conforms } = require('lodash');
+const { isNil } = require('lodash');
 
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
@@ -34,12 +34,12 @@ module.exports = {
     return entities.map(entity => sanitizeEntity(entity, { model: strapi.models.kanji }));
   },
 
-  async quizAnswerWithMeaning(ctx) {
+  async quizSample(ctx) {
     try {
-      const { level, count, mode } = ctx.query;
+      const { level, mode, kind, start, end, options } = ctx.query;
       const params = {
         level,
-        _limit: count
+        _limit: end
       }
       const quizs = [];
       const entities = await strapi.services.kanji.find(params);
@@ -54,7 +54,7 @@ module.exports = {
           disable: false
         };
       });
-      if (mode === 'test') {
+      if (mode === 'test' && kind === 'random') {
         return meaning_list;
       }
       const randomMeaning = strapi.services.kanji.getRandom(entities, 30);
@@ -82,7 +82,6 @@ module.exports = {
         }
         quizs.push(quiz);
       }))
-      // console.log(quizs)
       return quizs;
     }
     catch (error) {
@@ -91,41 +90,35 @@ module.exports = {
     }
   },
 
-  async quizAnswerWithKanji(ctx) {
+  async quiz(ctx) {
     try {
-      const quizs = [];
-      const entities = await strapi.services.kanji.find({ _limit: -1 });
+      const { level, mode, kind, start, end, options } = ctx.query;
+      const params = {
+        level,
+        _limit: end ? end : -1
+      }
+      let quizs = [];
+      const optionsData = [
+        'answerWithMeaning',
+        'answerWithKanji',
+        'answerWithKunyoumi',
+        'answerWithOnyoumi',
+        'answerWithPictures'
+      ]
+      const entities = await strapi.services.kanji.find(params);
       if (entities.length == 0) {
-        return ctx.send({ message: 'No data in kanji table' }, 400);
+        return [];
       }
-      const kanji_list = _.map(entities, entity => {
-        return entity.kanji;
-      });
-      const randomMeaning = strapi.services.kanji.getRandom(entities, 30);
-      if (isNil(randomMeaning)) {
-        return ctx.send({ message: 'Data is null or underfined value' }, 404);
-      }
-      if (randomMeaning.length == 0) {
-        return ctx.send({ message: 'No meaning found' }, 404);
-      }
-      await Promise.all(randomMeaning.map(word => {
-        let kanjis = _.cloneDeep(kanji_list);
-        kanjis = _.filter(kanji_list, m => m !== word.kanji);
-        let answer_list = strapi.services.kanji.getRandom(kanjis, 5)
-        answer_list.push(word.kanji);
-        answer_list = strapi.services.kanji.shuffle(answer_list);
-        const quiz = {
-          meaning: word.meaning,
-          correct: word.kanji,
-          answer_list
+      if (mode === 'test') {
+        if (kind === 'random') {
+          quizs = strapi.services.kanji.generateQuizByOptions(entities, optionsData);
+          return quizs;
         }
-        quizs.push(quiz);
-      }))
-      return quizs;
-    }
-    catch (error) {
-      console.log('=========== Error in quizAnswerWithKanji ========');
-      console.error(error);
+      }
+      return 'meaning_list';
+    } catch (error) {
+      console.error('error in quiz api : ', error);
     }
   }
+
 };

@@ -1,10 +1,18 @@
 'use strict';
-
+const _ = require('lodash');
+const { isNil, mean, memoize } = require('lodash');
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-services)
  * to customize this service
  */
 
+const options = {
+  answerWithMeaning: 'answerWithMeaning',
+  answerWithKanji: 'answerWithKanji',
+  answerWithKunyoumi: 'answerWithKunyoumi',
+  answerWithOnyoumi: 'answerWithOnyoumi',
+  answerWithPictures: 'answerWithPictures'
+}
 module.exports = {
   isDuplicated: async (word) => {
     return await strapi.services.kanji.count({ kanji: word }) > 0;
@@ -40,5 +48,222 @@ module.exports = {
     }
 
     return array;
+  },
+
+  generateQuizByOptions: async (entities, options_lst) => {
+    try {
+      const response = {
+        answer_with_meaning: [],
+        answer_with_kanji: [],
+        answer_with_kunyomi: [],
+        answer_with_onyomin: []
+      }
+      for (let option of options_lst) {
+        switch (option) {
+          case options.answerWithMeaning:
+            const answerMeaning = await strapi.services.kanji.questionForm(entities, options.answerWithMeaning);
+            response.answer_with_meaning = answerMeaning;
+            break;
+          case options.answerWithKanji:
+            const answerKanji = await strapi.services.kanji.questionForm(entities, options.answerWithKanji);
+            response.answer_with_kanji = answerKanji;
+            break;
+          case options.answerWithKunyoumi:
+            const answerKunyoumi = await strapi.services.kanji.questionForm(entities, options.answerWithKunyoumi);
+            response.answer_with_kunyomi = answerKunyoumi;
+          case options.answerWithOnyoumi:
+            const answerOnyoumi = await strapi.services.kanji.questionForm(entities, options.answerWithOnyoumi);
+            response.answer_with_onyomin = answerOnyoumi;
+            break;
+          case options.answerWithPictures:
+            // comming soon
+            break;
+          default:
+            break;
+        }
+      }
+      return response;
+    } catch (error) {
+      console.error('Error in generateQuizByOptions : ', console.error(error));
+    }
+  },
+
+  questionForm: async (entities, kind) => {
+    const response = [];
+    let meaning_list = []
+    switch (kind) {
+      case options.answerWithMeaning:
+        meaning_list = strapi.services.kanji.getMeaningList(entities, options.answerWithMeaning);
+        break;
+      case options.answerWithKanji:
+        meaning_list = strapi.services.kanji.getMeaningList(entities, options.answerWithKanji);
+        break;
+      case options.answerWithKunyoumi:
+        meaning_list = strapi.services.kanji.getMeaningList(entities, options.answerWithKunyoumi);
+        break;
+      case options.answerWithOnyoumi:
+        meaning_list = strapi.services.kanji.getMeaningList(entities, options.answerWithOnyoumi);
+        break;
+      case options.answerWithPictures:
+        // comming soon
+        break;
+      default:
+        break;
+    }
+    const randomMeaning = strapi.services.kanji.getRandom(entities, 20);
+    if (isNil(randomMeaning)) {
+      return ctx.send({ message: 'Data is null or underfined value' }, 404);
+    }
+    if (randomMeaning.length == 0) {
+      return ctx.send({ message: 'No kanji words found' }, 404);
+    }
+    await Promise.all(randomMeaning.map(word => {
+      let meanings = _.cloneDeep(meaning_list);
+      meanings = strapi.services.kanji.filterMeaning(meaning_list, word, kind);
+      let answer_list = strapi.services.kanji.getRandom(meanings, 5);
+      answer_list.push(strapi.services.kanji.getAnswerList(word, kind));
+      answer_list = strapi.services.kanji.shuffle(answer_list);
+      const quiz = strapi.services.kanji.getShuffleQuiz(word, answer_list, kind);
+      response.push(quiz);
+    }));
+    return response;
+  },
+
+  filterMeaning: (meaning_list, word, kind) => {
+    switch (kind) {
+      case options.answerWithMeaning:
+        return _.filter(meaning_list, m => m.meaning !== word.meaning);
+      case options.answerWithKanji:
+        return _.filter(meaning_list, m => m.kanji !== word.kanji);
+      case options.answerWithKunyoumi:
+        return _.filter(meaning_list, m => m.meaning !== word.kunyomi);
+      case options.answerWithOnyoumi:
+        return _.filter(meaning_list, m => m.kanji !== word.onyomi);
+      case options.answerWithPictures:
+        break;
+      default:
+        break;
+    }
+  },
+
+  getMeaningList: (entities, kind) => {
+    let meaning_list = [];
+    switch (kind) {
+      case options.answerWithMeaning:
+        meaning_list = _.map(entities, entity => {
+          return {
+            meaning: entity.meaning,
+            ischoose: false,
+            isCorrect: false,
+            disable: false
+          };
+        });
+        return (meaning_list);
+      case options.answerWithKanji:
+        meaning_list = _.map(entities, entity => {
+          return {
+            meaning: entity.kanji,
+            ischoose: false,
+            isCorrect: false,
+            disable: false
+          };
+        });
+        return (meaning_list);
+      case options.answerWithKunyoumi:
+        meaning_list = _.map(entities, entity => {
+          return {
+            meaning: entity.kunyomi,
+            ischoose: false,
+            isCorrect: false,
+            disable: false
+          };
+        });
+        return (meaning_list);
+      case options.answerWithOnyoumi:
+        meaning_list = _.map(entities, entity => {
+          return {
+            meaning: entity.onyomi,
+            ischoose: false,
+            isCorrect: false,
+            disable: false
+          };
+        });
+        return (meaning_list);
+      case options.answerWithPictures:
+        break;
+      default:
+        break;
+    }
+    return meaning_list;
+  },
+
+  getAnswerList: (word, kind) => {
+    switch (kind) {
+      case options.answerWithMeaning:
+        return {
+          meaning: word.meaning,
+          ischoose: false,
+          isCorrect: false,
+          disable: false
+        };
+      case options.answerWithKanji:
+        return {
+          meaning: word.kanji,
+          ischoose: false,
+          isCorrect: false,
+          disable: false
+        };
+      case options.answerWithKunyoumi:
+        return {
+          meaning: word.kunyomi,
+          ischoose: false,
+          isCorrect: false,
+          disable: false
+        };
+      case options.answerWithOnyoumi:
+        return {
+          meaning: word.onyomi,
+          ischoose: false,
+          isCorrect: false,
+          disable: false
+        };
+      case options.answerWithPictures:
+        break;
+      default:
+        break;
+    }
+  },
+
+  getShuffleQuiz: (word, answer_list, kind) => {
+    switch (kind) {
+      case options.answerWithMeaning:
+        return {
+          head: word.kanji,
+          correct: word.meaning,
+          answer_list
+        }
+      case options.answerWithKanji:
+        return {
+          head: word.meaning,
+          correct: word.kanji,
+          answer_list
+        }
+      case options.answerWithKunyoumi:
+        return {
+          head: word.kanji,
+          correct: word.kunyomi,
+          answer_list
+        }
+      case options.answerWithOnyoumi:
+        return {
+          head: word.kanji,
+          correct: word.onyomi,
+          answer_list
+        }
+      case options.answerWithPictures:
+        break;
+      default:
+        break;
+    }
   }
 };

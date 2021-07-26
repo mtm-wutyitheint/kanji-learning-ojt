@@ -40,15 +40,6 @@ class Quiz extends React.Component {
     return axios.get(env.apiEndPoint + '/quiz/answer/meaning');
   }
 
-  componentDidMount() {
-    if (this.props.location.levelProps) {
-      if (this.props.location.levelProps.level) {
-        this.setState({ level: this.props.location.levelProps.level });
-      }
-    }
-    console.log('initial state : ', this.state);
-  }
-
   chooseAnswer(correct, ans, mainIndex, childIndex) {
     let changeState = _.cloneDeep(this.state.data);
     const restToFalse = changeState[mainIndex].answer_list.map(lst => {
@@ -84,13 +75,11 @@ class Quiz extends React.Component {
   }
 
   handeleSubmit() {
-    console.log('hello');
     this.getQuizKenji().then(res => {
       this.setState({
         data: res.data,
         showForm: false
       });
-      console.log(this.state);
     }).catch(error => console.error('Error in setState : ', error));
   }
 

@@ -58,16 +58,8 @@
     },
     {
       "method": "GET",
-      "path": "/quiz/answer/meaning",
-      "handler": "kanji.quizAnswerWithMeaning",
-      "config": {
-        "policies": []
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/quiz/answer/kanji",
-      "handler": "kanji.quizAnswerWithKanji",
+      "path": "/quiz",
+      "handler": "kanji.quiz",
       "config": {
         "policies": []
       }
