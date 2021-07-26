@@ -36,10 +36,15 @@ module.exports = {
 
   async quizAnswerWithMeaning(ctx) {
     try {
+      const { level, count, mode } = ctx.query;
+      const params = {
+        level,
+        _limit: count
+      }
       const quizs = [];
-      const entities = await strapi.services.kanji.find({ _limit: -1 });
+      const entities = await strapi.services.kanji.find(params);
       if (entities.length == 0) {
-        return ctx.send({ message: 'No data in kanji table' }, 400);
+        return [];
       }
       const meaning_list = _.map(entities, entity => {
         return {
@@ -49,6 +54,9 @@ module.exports = {
           disable: false
         };
       });
+      if (mode === 'test') {
+        return meaning_list;
+      }
       const randomMeaning = strapi.services.kanji.getRandom(entities, 30);
       if (isNil(randomMeaning)) {
         return ctx.send({ message: 'Data is null or underfined value' }, 404);
