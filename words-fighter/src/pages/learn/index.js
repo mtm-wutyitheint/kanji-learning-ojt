@@ -3,6 +3,8 @@ import kanjiPic from '../../img/kanji.png';
 import "./learn.scss";
 import KanjiDetail from '../../components/kanji-detail';
 import { withRouter } from 'react-router-dom';
+// import Pagination from '@material-ui/lab/Pagination';
+import Pagination from "./Pagination";
 
 class Learn extends React.Component {
   
@@ -11,12 +13,14 @@ class Learn extends React.Component {
     this.state = {
       dialogOpen: false,
       selectedIndex: null,
-      data: []
+      data: [],
+      pageOfItems: []
     }
     const { level } = this.props.location.state;
     this.kind = level;
     // this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
+    this.onChangePage = this.onChangePage.bind(this)
   }
   
   componentDidMount(){
@@ -41,6 +45,13 @@ class Learn extends React.Component {
   closeDialog() {
     this.setState({ dialogOpen: false, selectedIndex: null });
   }
+  search() {
+    console.log('search')
+  }
+  onChangePage(pageOfItems) {
+    // update state with new page of items
+    this.setState({ pageOfItems: pageOfItems })
+}
   render() {
     return (
       <div className="learn">
@@ -49,13 +60,16 @@ class Learn extends React.Component {
           <p className="next-chap">Next Chapter <i className="arrow right"></i></p>
         </div>
         <div className="container">
-          <form className="clearFix">
+          <form onClick= {this.search} className="clearFix">
             <input
               className='find'
               type="text"
-              placeholder="Find"></input>
+              placeholder="Find"
+              // value={this.state.value} 
+              // onChange={this.search} 
+              ></input>
           </form>
-          {this.state.data.map((words) => {
+          {this.state.pageOfItems.map((words) => {
             return (
               <div
                 onClick={() => this.openDialog(words.id)}
@@ -69,8 +83,20 @@ class Learn extends React.Component {
             )
           })}
         </div>
-        <div className="chapter-selection clearFix">
-          <p className="next-chap">Next Chapter <i className="arrow right"></i></p>
+        {/* <div className="chapter-selection clearFix">
+          <p className="next-chap">Next Chapter <i className="arrow right"  onClick={this.search()}></i> </p>
+        </div> */}
+        <div>
+          {this.state.data.length > 0 ? (
+            <>
+            <Pagination data={this.state.data} onChangePage={this.onChangePage} />
+
+              {/* <Pagination count={10} color="primary" /> */}
+
+            </>
+          ) : (
+          <h1>No Posts to display</h1> 
+            )}
         </div>
         <KanjiDetail
           open={this.state.dialogOpen}
