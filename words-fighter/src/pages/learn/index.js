@@ -27,7 +27,7 @@ class Learn extends React.Component {
     this.onChangePage = this.onChangePage.bind(this);
     this.search = this.search.bind(this)
   }
-  componentDidMount(){
+  componentDidMount() {
     const apiUrl = 'http://localhost:1337/kanjis';
     const { level } = this.props.location.state;
     const arrData = [];
@@ -35,11 +35,11 @@ class Learn extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         data.forEach(element => {
-          if(element.level === level){
+          if (element.level === level) {
             arrData.push(element);
           }
         });
-        this.setState({data: arrData})
+        this.setState({ data: arrData })
         defaultProps.data = arrData;
       })
       .catch((error) => console.log(error));
@@ -51,12 +51,18 @@ class Learn extends React.Component {
     this.setState({ dialogOpen: false, selectedIndex: null });
   }
   search = (event) => {
-    const data = this.state.data.filter(item =>{
-      return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase())
+    this.setState({
+      data: defaultProps.data.filter(item => {
+        return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase())
+      })
+    });
+    this.setState({
+      pageOfItems: this.state.data.filter(item => {
+        return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase())
+      })
     })
-    this.setState({pageOfItems: data, data: data})
-    if(event.target.value.length < 1){
-      this.setState({pageOfItems: defaultProps.pageOfItems, data: defaultProps.data})
+    if (event.target.value.length < 1) {
+      this.setState({ pageOfItems: defaultProps.pageOfItems, data: defaultProps.data })
     }
   }
   onChangePage(pageOfItems) {
@@ -69,12 +75,12 @@ class Learn extends React.Component {
       <div className="learn">
         <h1 className="header">Learn {this.kind} kanji </h1>
         <div className="chapter-selection clearFix">
-           <input
-              className="find clearFix"
-              type="text"
-              placeholder="Search"
-              onChange={this.search} 
-              ></input>
+          <input
+            className="find clearFix"
+            type="text"
+            placeholder="Search"
+            onChange={this.search}
+          ></input>
         </div>
         <div className="container">
           {this.state.pageOfItems.map((words) => {
@@ -83,10 +89,10 @@ class Learn extends React.Component {
                 onClick={() => this.openDialog(words.id)}
                 key={words.id}
                 className="block clearFix">
-                  <p className="mean">
-                    <span className="kanji">{words.kanji}</span>
-                    ({words.kunRomaji}) = {words.meaning}</p>
-                  <img className="logo" src={kanjiPic} alt="kanji logo"></img>
+                <p className="mean">
+                  <span className="kanji">{words.kanji}</span>
+                  ({words.kunRomaji}) = {words.meaning}</p>
+                <img className="logo" src={kanjiPic} alt="kanji logo"></img>
               </div>
             )
           })}
@@ -94,11 +100,11 @@ class Learn extends React.Component {
         <div>
           {this.state.data.length > 0 ? (
             <>
-            <Pagination data={this.state.data} onChangePage={this.onChangePage} />
+              <Pagination data={this.state.data} onChangePage={this.onChangePage} />
             </>
           ) : (
-          <h1>No Posts to display</h1> 
-            )}
+            <h1>No Posts to display</h1>
+          )}
         </div>
         <KanjiDetail
           open={this.state.dialogOpen}
