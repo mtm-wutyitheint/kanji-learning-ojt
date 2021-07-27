@@ -3,26 +3,30 @@ import kanjiPic from '../../img/kanji.png';
 import "./learn.scss";
 import KanjiDetail from '../../components/kanji-detail';
 import { withRouter } from 'react-router-dom';
-// import Pagination from '@material-ui/lab/Pagination';
 import Pagination from "./Pagination";
 
+const defaultProps = {
+  data: [],
+  pageOfItems: []
+}
+
 class Learn extends React.Component {
-  
   constructor(props) {
     super(props);
     this.state = {
       dialogOpen: false,
       selectedIndex: null,
       data: [],
-      pageOfItems: []
+      pageOfItems: [],
+      inputvalue: ''
     }
     const { level } = this.props.location.state;
     this.kind = level;
     // this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
-    this.onChangePage = this.onChangePage.bind(this)
+    this.onChangePage = this.onChangePage.bind(this);
+    this.search = this.search.bind(this)
   }
-  
   componentDidMount(){
     const apiUrl = 'http://localhost:1337/kanjis';
     const { level } = this.props.location.state;
@@ -36,6 +40,7 @@ class Learn extends React.Component {
           }
         });
         this.setState({data: arrData})
+        defaultProps.data = arrData;
       })
       .catch((error) => console.log(error));
   }
@@ -45,30 +50,33 @@ class Learn extends React.Component {
   closeDialog() {
     this.setState({ dialogOpen: false, selectedIndex: null });
   }
-  search() {
-    console.log('search')
+  search = (event) => {
+    const data = this.state.data.filter(item =>{
+      return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase())
+    })
+    this.setState({pageOfItems: data, data: data})
+    if(event.target.value.length < 1){
+      this.setState({pageOfItems: defaultProps.pageOfItems, data: defaultProps.data})
+    }
   }
   onChangePage(pageOfItems) {
     // update state with new page of items
     this.setState({ pageOfItems: pageOfItems })
-}
+    defaultProps.pageOfItems = pageOfItems;
+  }
   render() {
     return (
       <div className="learn">
-        <h1 className="header">Learn {this.kind} kanji</h1>
+        <h1 className="header">Learn {this.kind} kanji </h1>
         <div className="chapter-selection clearFix">
-          <p className="next-chap">Next Chapter <i className="arrow right"></i></p>
+           <input
+              className="find clearFix"
+              type="text"
+              placeholder="Search"
+              onChange={this.search} 
+              ></input>
         </div>
         <div className="container">
-          <form onClick= {this.search} className="clearFix">
-            <input
-              className='find'
-              type="text"
-              placeholder="Find"
-              // value={this.state.value} 
-              // onChange={this.search} 
-              ></input>
-          </form>
           {this.state.pageOfItems.map((words) => {
             return (
               <div
@@ -83,16 +91,10 @@ class Learn extends React.Component {
             )
           })}
         </div>
-        {/* <div className="chapter-selection clearFix">
-          <p className="next-chap">Next Chapter <i className="arrow right"  onClick={this.search()}></i> </p>
-        </div> */}
         <div>
           {this.state.data.length > 0 ? (
             <>
             <Pagination data={this.state.data} onChangePage={this.onChangePage} />
-
-              {/* <Pagination count={10} color="primary" /> */}
-
             </>
           ) : (
           <h1>No Posts to display</h1> 

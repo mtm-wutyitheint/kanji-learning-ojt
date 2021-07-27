@@ -64,7 +64,6 @@ class Pagination extends React.Component {
 
         // calculate total pages
         var totalPages = Math.ceil(totalItems / pageSize);
-
         var startPage, endPage;
         if (totalPages <= 10) {
             // less than 10 total pages so show all
@@ -90,7 +89,7 @@ class Pagination extends React.Component {
 
         // create an array of pages to ng-repeat in the pager control
         var pages = [...Array((endPage + 1) - startPage).keys()].map(i => startPage + i);
-
+        
         // return object with all pager properties required by the view
         return {
             totalItems: totalItems,
@@ -108,7 +107,7 @@ class Pagination extends React.Component {
     render() {
         var pager = this.state.pager;
 
-        if (!pager.pages || pager.pages.length <= 1) {
+        if (!pager.pages || pager.pages.length < 1) {
             // don't display pager if there is only 1 page
             return null;
         }
