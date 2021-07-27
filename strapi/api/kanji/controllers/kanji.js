@@ -92,30 +92,24 @@ module.exports = {
 
   async quiz(ctx) {
     try {
-      const { level, mode, kind, start, end, options } = ctx.query;
+      let { level, mode, kind, count, options } = ctx.query;
+      console.log('option : ', options);
+      let quizs = [];
       const params = {
         level,
-        _limit: end ? end : -1
+        _limit: -1
       }
-      let quizs = [];
-      const optionsData = [
-        'answerWithMeaning',
-        'answerWithKanji',
-        'answerWithKunyoumi',
-        'answerWithOnyoumi',
-        'answerWithPictures'
-      ]
       const entities = await strapi.services.kanji.find(params);
       if (entities.length == 0) {
         return [];
       }
       if (mode === 'test') {
         if (kind === 'random') {
-          quizs = strapi.services.kanji.generateQuizByOptions(entities, optionsData);
+          quizs = strapi.services.kanji.generateQuizByOptions(entities, count, options);
           return quizs;
         }
       }
-      return 'meaning_list';
+      return [];
     } catch (error) {
       console.error('error in quiz api : ', error);
     }
