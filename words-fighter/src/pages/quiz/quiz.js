@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { env } from '../../env/development';
 import QuizComponent from '../../components/quiz-component/quiz-component';
 import qs from 'qs';
+import Select from 'react-select';
 
 const checkBoxItems = [
   { name: "Answer with meaning", value: "answerWithMeaning" },
@@ -44,8 +45,6 @@ class Quiz extends React.Component {
     this.handleChangeForCheck = this.handleChangeForCheck.bind(this);
     this.handeleSubmit = this.handeleSubmit.bind(this);
     this.checkValidation = this.checkValidation.bind(this);
-    // this.handleSelectRemove = this.handleSelectRemove.bind(this);
-    this.handleSelectAdd = this.handleSelectAdd.bind(this);
   }
 
   componentDidMount() {
@@ -60,7 +59,6 @@ class Quiz extends React.Component {
       })
       .then(res => {
         this.setState({
-          // totalKanji: 200
           totalKanji: Number(res.data)
         });
         const chaps = [];
@@ -72,19 +70,28 @@ class Quiz extends React.Component {
           countChapter += 1;
         }
         for (let i = 1; i <= countChapter; i++) {
+          let end = i * 10;
+          const start = end - 10;
+          end = end < this.state.totalKanji ? end : this.state.totalKanji;
           chaps.push({
-            name: 'Chapter ' + i,
-            value: i
+            label: 'Chapter ' + i,
+            value: i,
+            start,
+            end
           });
           if (i === 1) {
             first.push({
-              name: 'Chapter ' + i,
-              value: i
+              label: 'Chapter ' + i,
+              value: i,
+              start,
+              end
             });
           } else {
             remain.push({
-              name: 'Chapter ' + i,
-              value: i
+              label: 'Chapter ' + i,
+              value: i,
+              start,
+              end
             });
           }
         }
@@ -93,9 +100,6 @@ class Quiz extends React.Component {
           selectedChapters: first,
           remainChapters: remain
         })
-        // setTimeout(() => {
-        //   console.log(this.state);
-        // }, 3000);
       }).catch(error => console.error('Error in setState : ', error));
   }
 
@@ -118,7 +122,6 @@ class Quiz extends React.Component {
   }
 
   handleSelectRemove(selectChap) {
-    console.log(selectChap);
     if (selectChap) {
       const select = _.cloneDeep(this.state.selectedChapters);
       _.remove(select, s => { return s.value === selectChap.value });
@@ -132,11 +135,11 @@ class Quiz extends React.Component {
   }
 
   handleSelectAdd(event) {
-    if (event.target.value !== '') {
-      const value = parseInt(event.target.value);
+    if (event.value !== '') {
+      const value = parseInt(event.value);
       const remain = _.cloneDeep(this.state.remainChapters);
       const select = _.cloneDeep(this.state.selectedChapters);
-      const addIndex = _.findIndex(remain, function (o) { return o.value === value; });
+      const addIndex = _.findIndex(remain, re => { return re.value === value; });
       select.push(remain[addIndex]);
       _.remove(remain, r => { return r.value === value });
       this.setState({
@@ -170,12 +173,22 @@ class Quiz extends React.Component {
   }
 
   handeleSubmit() {
-    const para = {
+    const chapter = _.map(this.state.selectedChapters, seleChap => {
+      return {
+        start: seleChap.start,
+        end: seleChap.end
+      }
+    });
+    let para = {
       level: this.state.level,
       mode: this.state.mode,
       kind: this.state.kind,
-      count: this.state.count,
       options: this.state.options,
+    }
+    if (this.state.kind === 'random') {
+      para.count = this.state.count
+    } else {
+      para.chapter = chapter
     }
     axios.get(env.apiEndPoint + '/quiz',
       {
@@ -287,26 +300,19 @@ class Quiz extends React.Component {
                   {this.state.kind === 'chapter' &&
                     <div>
                       <label className="form-label">Chapters</label>
-                      <select
+                      <Select
+                        value={this.state.remainChapters.value}
+                        options={this.state.remainChapters}
+                        defaultValue={this.state.remainChapters[1]}
+                        className="form-field input-range"
                         name="chapters"
                         id="chapters"
-                        onChange={this.handleSelectAdd}
-                        defaultValue={'default'}
-                        className="form-field input-range">
-                        <option value="default"></option>
-                        {this.state.remainChapters.map((cha, i) => {
-                          return (
-                            <option
-                              key={i}
-                              value={cha.value}>{cha.name}</option>
-                          )
-                        })}
-                      </select>
+                        onChange={(e) => this.handleSelectAdd(e)} />
                       <div>
                         {this.state.selectedChapters.map((selectedChapter, i) => {
                           return (
                             <p className="select-chapter-box" key={i}>
-                              {selectedChapter.name}
+                              {selectedChapter.label}
                               <span
                                 onClick={() => this.handleSelectRemove(selectedChapter)}
                                 className="cross">&#10060;</span>
@@ -347,7 +353,9 @@ class Quiz extends React.Component {
               <button
                 className="btn-submit"
                 type="button"
-                disabled={(this.state.options.length < 2 || (this.state.count < 10 || this.state.count > 50))}
+                disabled={(this.state.options.length < 2
+                  || (this.state.count < 10 || this.state.count > 50)
+                  || this.state.selectedChapters.length === 0)}
                 onClick={this.handeleSubmit}>Let Start</button>
             </form>
           }

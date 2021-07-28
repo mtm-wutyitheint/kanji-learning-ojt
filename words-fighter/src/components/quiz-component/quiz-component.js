@@ -31,45 +31,47 @@ class QuizComponent extends React.Component {
     changeState[mainIndex].answer_list[childIndex].ischoose = !(ans.ischoose);
     this.setState({ data: changeState });
   }
-  
+
   render() {
     return (
       <div className="quiz-component">
-        <h2 className="quiz-header">{this.state.header}</h2>
         {this.state.data.length > 0 &&
           <div className="container">
-            {this.state.data.map((snap, index) => {
-              return (
-                <div className="block" key={index}>
-                  <div className="question">{snap.head}</div>
-                  <div className="answer-list">
-                    {snap.answer_list.map((ans, i) => {
-                      let choose = 'choose-btn';
-                      let correct = 'correct-btn';
-                      let normal = 'normal-btn';
-                      let btn;
-                      if (!ans.ischoose && !ans.isCorrect) {
-                        btn = normal;
-                      } else if (!ans.isCorrect && ans.ischoose) {
-                        btn = choose;
-                      } else if (ans.isCorrect && !ans.ischoose) {
-                        btn = correct;
-                      } else if (ans.isCorrect && ans.ischoose) {
-                        btn = correct;
-                      }
-                      return (
-                        <button className={"answer " + btn}
-                          key={i}
-                          disabled={ans.disable}
-                          onClick={() => this.chooseAnswer(snap.correct, ans, index, i)}>
-                          {ans.meaning}
-                        </button>
-                      )
-                    })}
+            <h2 className="quiz-header">{this.state.header}</h2>
+            <div className="container-flex">
+              {this.state.data.map((snap, index) => {
+                return (
+                  <div className="block" key={index}>
+                    <div className="question">{snap.head}</div>
+                    <div className="answer-list">
+                      {snap.answer_list.map((ans, i) => {
+                        let choose = 'choose-btn';
+                        let correct = 'correct-btn';
+                        let normal = 'normal-btn';
+                        let btn;
+                        if (!ans.ischoose && !ans.isCorrect) {
+                          btn = normal;
+                        } else if (!ans.isCorrect && ans.ischoose) {
+                          btn = choose;
+                        } else if (ans.isCorrect && !ans.ischoose) {
+                          btn = correct;
+                        } else if (ans.isCorrect && ans.ischoose) {
+                          btn = correct;
+                        }
+                        return (
+                          <button className={"answer " + btn}
+                            key={i}
+                            disabled={ans.disable}
+                            onClick={() => this.chooseAnswer(snap.correct, ans, index, i)}>
+                            {ans.meaning}
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
         }
       </div>

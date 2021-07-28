@@ -50,7 +50,16 @@ module.exports = {
     return array;
   },
 
-  generateQuizByOptions: async (entities, count, options_lst) => {
+  getKanjiByChapter: (entities, chapter) => {
+    let final = [];
+    _.forEach(chapter, c => {
+      const data = _.slice(entities, c.start, c.end);
+      final.push(...data);
+    })
+    return final;
+  },
+
+  generateQuizByOptions: async (entities, count = 20, chapter = [{ start: '1', end: '10' }], options_lst) => {
     try {
       const response = {
         answer_with_meaning: [],
@@ -61,18 +70,19 @@ module.exports = {
       for (let option of options_lst) {
         switch (option) {
           case options.answerWithMeaning:
-            const answerMeaning = await strapi.services.kanji.questionForm(entities, count, options.answerWithMeaning);
+            const answerMeaning = await strapi.services.kanji.questionForm(entities, count, chapter, options.answerWithMeaning);
             response.answer_with_meaning = answerMeaning;
             break;
           case options.answerWithKanji:
-            const answerKanji = await strapi.services.kanji.questionForm(entities, count, options.answerWithKanji);
+            const answerKanji = await strapi.services.kanji.questionForm(entities, count, chapter, options.answerWithKanji);
             response.answer_with_kanji = answerKanji;
             break;
           case options.answerWithKunyoumi:
-            const answerKunyoumi = await strapi.services.kanji.questionForm(entities, count, options.answerWithKunyoumi);
+            const answerKunyoumi = await strapi.services.kanji.questionForm(entities, count, chapter, options.answerWithKunyoumi);
             response.answer_with_kunyomi = answerKunyoumi;
+            break;
           case options.answerWithOnyoumi:
-            const answerOnyoumi = await strapi.services.kanji.questionForm(entities, count, options.answerWithOnyoumi);
+            const answerOnyoumi = await strapi.services.kanji.questionForm(entities, count, chapter, options.answerWithOnyoumi);
             response.answer_with_onyomi = answerOnyoumi;
             break;
           case options.answerWithPictures:
@@ -88,10 +98,9 @@ module.exports = {
     }
   },
 
-  questionForm: async (entities, count, kind) => {
+  questionForm: async (entities, count, chapter, kind) => {
     const response = [];
     let meaning_list = [];
-    count = count ? count : 20;
     switch (kind) {
       case options.answerWithMeaning:
         meaning_list = strapi.services.kanji.getMeaningList(entities, options.answerWithMeaning);
@@ -111,7 +120,12 @@ module.exports = {
       default:
         break;
     }
-    const randomMeaning = strapi.services.kanji.getRandom(entities, count);
+    let randomMeaning;
+    if (kind === 'random') {
+      randomMeaning = strapi.services.kanji.getRandom(entities, count);
+    } else {
+      randomMeaning = strapi.services.kanji.getKanjiByChapter(entities, chapter);
+    }
     if (isNil(randomMeaning)) {
       return ctx.send({ message: 'Data is null or underfined value' }, 404);
     }

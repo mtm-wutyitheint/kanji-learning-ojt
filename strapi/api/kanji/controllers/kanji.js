@@ -92,8 +92,7 @@ module.exports = {
 
   async quiz(ctx) {
     try {
-      let { level, mode, kind, count, options } = ctx.query;
-      console.log('option : ', options);
+      let { level, mode, kind, count, chapter, options } = ctx.query;
       let quizs = [];
       const params = {
         level,
@@ -105,7 +104,11 @@ module.exports = {
       }
       if (mode === 'test') {
         if (kind === 'random') {
-          quizs = strapi.services.kanji.generateQuizByOptions(entities, count, options);
+          quizs = strapi.services.kanji.generateQuizByOptions(entities, count, chapter, options);
+          return quizs;
+        }
+        if (kind === 'chapter') {
+          quizs = strapi.services.kanji.generateQuizByOptions(entities, count, chapter, options);
           return quizs;
         }
       }
