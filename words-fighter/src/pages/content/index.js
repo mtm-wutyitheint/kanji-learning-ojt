@@ -1,9 +1,7 @@
 import "./content.scss"
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Content() {
-  const location = useLocation();
-  const { level } = location.state;
   return (
     <div className="content">
       <div className="content-logo clearFix">
@@ -17,9 +15,6 @@ function Content() {
           <div className="section">
             <Link to={{
               pathname: "/learn",
-              state: {
-                level: level,
-              },
             }}>
               <div className="link">
                 <p>Learn</p>

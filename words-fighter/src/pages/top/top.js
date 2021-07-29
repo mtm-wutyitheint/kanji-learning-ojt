@@ -4,6 +4,11 @@ import "./top.scss";
 import { Link } from "react-router-dom";
 
 function Top() {
+  function setLevel(level) {
+    console.log(level)
+    localStorage.setItem('level', level );
+  }
+
   return (
     <div className="Top">
       <div className="clearFix">
@@ -20,7 +25,7 @@ function Top() {
                 level: 'N4',
               },
             }}>
-              <button className="level-btn no-link">N4</button>
+              <button onClick={() => setLevel('N4')} className="level-btn no-link">N4</button>
             </Link>
           </div>
           <div className="level">
@@ -29,8 +34,10 @@ function Top() {
               state: {
                 level: 'N5',
               },
-            }}>
-              <button className="level-btn no-link">N5</button>
+            }}
+           
+            >
+              <button onClick={() => setLevel('N5')} className="level-btn no-link">N5</button>
             </Link>
           </div>
         </div>

@@ -7,7 +7,8 @@ import Pagination from "./Pagination";
 
 const defaultProps = {
   data: [],
-  pageOfItems: []
+  pageOfItems: [],
+  level: ''
 }
 
 class Learn extends React.Component {
@@ -20,27 +21,21 @@ class Learn extends React.Component {
       pageOfItems: [],
       inputvalue: ''
     }
-    const { level } = this.props.location.state;
-    this.kind = level;
+    defaultProps.level  = localStorage.getItem('level')
+    this.kind = defaultProps.level ;
     // this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
     this.onChangePage = this.onChangePage.bind(this);
     this.search = this.search.bind(this)
   }
   componentDidMount() {
-    const apiUrl = 'http://localhost:1337/kanjis';
-    const { level } = this.props.location.state;
-    const arrData = [];
+    const apiUrl = defaultProps.level === 'N5' ? 'http://localhost:1337/kanjis?level=N5' : 
+                                                 'http://localhost:1337/kanjis?level=N4';
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
-        data.forEach(element => {
-          if (element.level === level) {
-            arrData.push(element);
-          }
-        });
-        this.setState({ data: arrData })
-        defaultProps.data = arrData;
+        this.setState({ data: data })
+        defaultProps.data = data;
       })
       .catch((error) => console.log(error));
   }
@@ -53,7 +48,9 @@ class Learn extends React.Component {
   search = (event) => {
     this.setState({
       data: defaultProps.data.filter(item => {
-        return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase())
+        return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase()) ||
+               item.kanji.toLowerCase().includes(event.target.value.toLowerCase()) ||
+               item.meaning.toLowerCase().includes(event.target.value.toLowerCase())
       })
     });
     this.setState({
@@ -100,7 +97,7 @@ class Learn extends React.Component {
         <div>
           {this.state.data.length > 0 ? (
             <>
-              <Pagination data={this.state.data} onChangePage={this.onChangePage} />
+              <Pagination data={this.state.data} showPage='true' onChangePage={this.onChangePage} />
             </>
           ) : (
             <h1>No Posts to display</h1>
