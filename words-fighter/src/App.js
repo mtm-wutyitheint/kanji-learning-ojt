@@ -7,13 +7,14 @@ import {
 import CommingSoon from "./pages/comming-soon";
 import Content from './pages/content';
 import Learn from "./pages/learn";
+import Signup from "./pages/signup";
 import Top from './pages/top/top';
 
 function App() {
   return (
     <Router>
       <Switch>
-      <Route path="/comming-soon">
+        <Route path="/comming-soon">
           <CommingSoon />
         </Route>
         <Route path="/content">
@@ -24,6 +25,9 @@ function App() {
         </Route>
         <Route path="/learn">
           <Learn />
+        </Route>
+        <Route path="/singup">
+          <Signup />
         </Route>
         <Route path="/">
           <Redirect to="/top"></Redirect>
