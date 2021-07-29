@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/n-5-scores",
+      "handler": "n5-score.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/n-5-scores/count",
+      "handler": "n5-score.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/n-5-scores/:id",
+      "handler": "n5-score.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/n-5-scores",
+      "handler": "n5-score.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/n-5-scores/:id",
+      "handler": "n5-score.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/n-5-scores/:id",
+      "handler": "n5-score.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

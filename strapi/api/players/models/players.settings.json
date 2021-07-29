@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "players",
   "info": {
-    "name": "Players"
+    "name": "Players",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -19,10 +20,10 @@
     "password": {
       "type": "password"
     },
-    "n5_score": {
+    "current_n5_score": {
       "type": "string"
     },
-    "n4_score": {
+    "current_n4_score": {
       "type": "string"
     },
     "profile": {
@@ -36,6 +37,13 @@
       "plugin": "upload",
       "required": false,
       "pluginOptions": {}
+    },
+    "time_taken": {
+      "type": "string"
+    },
+    "practise_record": {
+      "collection": "n5-score",
+      "via": "player"
     }
   }
 }
