@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import "./signup.scss";
+import "./login.scss";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 
-class Signup extends Component {
+class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,7 +26,7 @@ class Signup extends Component {
     singup() {
         this.setState({open: true});
         try{
-            fetch('http://localhost:1337/players', {
+            fetch('http://localhost:1337/player_login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,59 +39,57 @@ class Signup extends Component {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if(data){
-                        console.log(data);
-                        this.setState({success: true})
-                    }
-                })
-                .catch(err => {
-                    console.error(err)
-                })
+                    (data.status === 'success') ?
+                    this.setState({success: true}) :
+                    this.setState({success: false})
+                });
         } catch (error) {
             console.error(error);
-
+            this.setState({success: false});
         }
     }
     handleChange(event) {
         this.setState({name: event.target.name === 'name' ? event.target.value : this.state.name})
-        this.setState({email: event.target.name === 'email' ? event.target.value :  this.state.email})
+        // this.setState({email: event.target.name === 'email' ? event.target.value :  this.state.email})
         this.setState({password: event.target.name === 'password' ? event.target.value :  this.state.password})
     }
+     handleClose = () => {
+        this.setState({open: false})
+      };
     render() {
+        let alertTitle = this.state.success === true ? 'Login Sucess!': 'Login Failed! Please Try again...';
+        let route = this.state.success === true ? '/content': '/login';
         return (
-            <div className="signup">
+            <div className="login">
                 <div className="content-logo">
                     <div className="content-log2"></div>
                 </div>
-                <div  className="form">
+                <div className="form">
                     <input className="input" name="name" value={this.state.name} placeholder="Name" onChange={this.handleChange}></input>
-                    <input className="input" name="email" value={this.state.email} placeholder="Email" onChange={this.handleChange}></input>
                     <input className="input" type="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChange}></input>
-                    <button  onClick={this.singup} className="text-center">Sing Up</button>
-                    <a href="/login" className="text-center">Already an Account? Login in</a>
+                    <button  onClick={this.singup} className="text-center">Login</button>
                 </div>
                 <Dialog
-                        open={this.state.open}
-                        onClose={this.handleClose}
-                        className="dialog"
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Sing up Success! Please Login again...
-                        </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                        <Link className="no-link" to="/login">
-                            <Button  className="no-link" onClick={this.handleClose} color="primary" autoFocus>
-                                OK
-                            </Button>
-                        </Link>
-                        </DialogActions>
-                    </Dialog>
+                    open={this.state.open}
+                    // onClose={this.state.setOpen}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {alertTitle}
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Link className="no-link" to={route}>
+                        <Button onClick={this.handleClose} color="primary" autoFocus>
+                            OK
+                        </Button>
+                    </Link>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }
 }
-export default Signup
+export default Login

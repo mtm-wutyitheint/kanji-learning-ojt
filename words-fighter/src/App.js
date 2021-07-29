@@ -7,6 +7,7 @@ import {
 import CommingSoon from "./pages/comming-soon";
 import Content from './pages/content';
 import Learn from "./pages/learn";
+import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Top from './pages/top/top';
 
@@ -28,6 +29,9 @@ function App() {
         </Route>
         <Route path="/singup">
           <Signup />
+        </Route>
+        <Route path="/login">
+          <Login />
         </Route>
         <Route path="/">
           <Redirect to="/top"></Redirect>
