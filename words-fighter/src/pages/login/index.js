@@ -16,12 +16,10 @@ class Login extends Component {
           password: '',
           open: false,
           setOpen: false,
-          success: false
+          success: true
         }
         this.handleChange = this.handleChange.bind(this);
         this.singup = this.singup.bind(this);
-        // this.handleClickOpen = this.handleClickOpen.bind(this);
-        // this.handleClose = this.handleClose(this)
     }
     singup() {
         this.setState({open: true});
@@ -33,15 +31,18 @@ class Login extends Component {
                 },
                 body: JSON.stringify({
                     name: this.state.name,
-                    // email: this.state.email,
                     password: this.state.password,
                 }),
                 })
                 .then(response => response.json())
                 .then(data => {
-                    (data.status === 'success') ?
-                    this.setState({success: true}) :
-                    this.setState({success: false})
+                    if(data.status === 'success'){
+                        this.setState({success: true});
+                        console.log(data)
+                        localStorage.setItem('username', data.name );
+                    }else {
+                        this.setState({success: false})
+                    }
                 });
         } catch (error) {
             console.error(error);
@@ -50,15 +51,14 @@ class Login extends Component {
     }
     handleChange(event) {
         this.setState({name: event.target.name === 'name' ? event.target.value : this.state.name})
-        // this.setState({email: event.target.name === 'email' ? event.target.value :  this.state.email})
         this.setState({password: event.target.name === 'password' ? event.target.value :  this.state.password})
     }
      handleClose = () => {
-        this.setState({open: false})
+        this.setState({open: false, name: '', password: ''})
       };
     render() {
         let alertTitle = this.state.success === true ? 'Login Sucess!': 'Login Failed! Please Try again...';
-        let route = this.state.success === true ? '/content': '/login';
+        let route = this.state.success === true ? '/top': '/login';
         return (
             <div className="login">
                 <div className="content-logo">
@@ -67,7 +67,7 @@ class Login extends Component {
                 <div className="form">
                     <input className="input" name="name" value={this.state.name} placeholder="Name" onChange={this.handleChange}></input>
                     <input className="input" type="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChange}></input>
-                    <button  onClick={this.singup} className="text-center">Login</button>
+                    <button  onClick={this.singup} className="text-center" disabled={(this.state.name.length === 0 || this.state.password.length === 0 )}>Login</button>
                 </div>
                 <Dialog
                     open={this.state.open}

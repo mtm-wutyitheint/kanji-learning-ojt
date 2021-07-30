@@ -27,14 +27,14 @@ function App() {
         <Route path="/learn">
           <Learn />
         </Route>
-        <Route path="/singup">
+        <Route path="/signup">
           <Signup />
         </Route>
         <Route path="/login">
           <Login />
         </Route>
         <Route path="/">
-          <Redirect to="/top"></Redirect>
+          <Redirect to="/signup"></Redirect>
         </Route>
       </Switch>
     </Router>
