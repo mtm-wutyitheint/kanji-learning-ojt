@@ -102,15 +102,13 @@ module.exports = {
       if (entities.length == 0) {
         return [];
       }
-      if (mode === 'test') {
-        if (kind === 'random') {
-          quizs = strapi.services.kanji.generateQuizByOptions(entities, count, chapter, options);
-          return quizs;
-        }
-        if (kind === 'chapter') {
-          quizs = strapi.services.kanji.generateQuizByOptions(entities, count, chapter, options);
-          return quizs;
-        }
+      if (mode !== 'exam') {
+        quizs = strapi.services.kanji.generateQuizByOptions(entities, count, chapter, kind, options);
+        return quizs;
+      }
+      if (mode === 'exam') {
+        quizs = strapi.services.kanji.generateQuizByOptions(entities, count, chapter, kind, options);
+        return quizs;
       }
       return [];
     } catch (error) {

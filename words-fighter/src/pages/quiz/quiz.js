@@ -44,7 +44,7 @@ class Quiz extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeForCheck = this.handleChangeForCheck.bind(this);
     this.handeleSubmit = this.handeleSubmit.bind(this);
-    this.checkValidation = this.checkValidation.bind(this);
+    this.allComplete = this.allComplete.bind(this);
   }
 
   componentDidMount() {
@@ -165,31 +165,41 @@ class Quiz extends React.Component {
     }
   }
 
-  checkValidation() {
-    if (this.state.options.length === 0) {
-      return true;
+  definePara() {
+    let para = {};
+    if (this.state.mode !== 'exam') {
+      const chapter = _.map(this.state.selectedChapters, seleChap => {
+        return {
+          start: seleChap.start,
+          end: seleChap.end
+        }
+      });
+      para = {
+        level: this.state.level,
+        mode: this.state.mode,
+        kind: this.state.kind,
+        options: this.state.options,
+      }
+      if (this.state.kind === 'random') {
+        para.count = this.state.count
+      } else {
+        para.chapter = chapter
+      }
+    } else {
+      const allOptions = _.map(checkBoxItems, i => i.value);
+      para = {
+        level: this.state.level,
+        mode: this.state.mode,
+        kind: 'random',
+        count: 30,
+        options: allOptions
+      }
     }
-    return false;
+    return para;
   }
 
   handeleSubmit() {
-    const chapter = _.map(this.state.selectedChapters, seleChap => {
-      return {
-        start: seleChap.start,
-        end: seleChap.end
-      }
-    });
-    let para = {
-      level: this.state.level,
-      mode: this.state.mode,
-      kind: this.state.kind,
-      options: this.state.options,
-    }
-    if (this.state.kind === 'random') {
-      para.count = this.state.count
-    } else {
-      para.chapter = chapter
-    }
+    const para = this.definePara();
     axios.get(env.apiEndPoint + '/quiz',
       {
         params: para,
@@ -207,6 +217,17 @@ class Quiz extends React.Component {
           showQuiz: true
         });
       }).catch(error => console.error('Error in setState : ', error));
+  }
+
+  allComplete() {
+    this.setState({
+      answerWithMeaning: [],
+      answerWithKanji: [],
+      answerWithKunyomi: [],
+      answerWithOnyomi: [],
+      showForm: true,
+      showQuiz: false
+    });
   }
 
   render() {
@@ -359,19 +380,16 @@ class Quiz extends React.Component {
                 onClick={this.handeleSubmit}>Let Start</button>
             </form>
           }
-          {(this.state.showQuiz && this.state.answerWithMeaning) &&
-            <QuizComponent data={this.state.answerWithMeaning} header="Answer with Meaning"></QuizComponent>
-          }
-          {(this.state.showQuiz && this.state.answerWithKanji) &&
-            <QuizComponent data={this.state.answerWithKanji} header="Answer with Kanji"></QuizComponent>
-          }
-          {(this.state.showQuiz && this.state.answerWithKunyomi) &&
-            <QuizComponent data={this.state.answerWithKunyomi} header="Answer with Kunyomi"></QuizComponent>
-          }
-          {(this.state.showQuiz && this.state.answerWithOnyomi) &&
-            <QuizComponent data={this.state.answerWithOnyomi} header="Answer with Onyomi"></QuizComponent>
+          {(this.state.showQuiz) &&
+            <QuizComponent
+              mode={this.state.mode}
+              answerWithMeaning={this.state.answerWithMeaning}
+              answerWithKanji={this.state.answerWithKanji}
+              answerWithKunyomi={this.state.answerWithKunyomi}
+              answerWithOnyomi={this.state.answerWithOnyomi}></QuizComponent>
           }
         </div>
+
       </div>
     )
   }

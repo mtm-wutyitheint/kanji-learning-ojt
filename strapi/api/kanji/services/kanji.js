@@ -59,7 +59,7 @@ module.exports = {
     return final;
   },
 
-  generateQuizByOptions: async (entities, count = 20, chapter = [{ start: '1', end: '10' }], options_lst) => {
+  generateQuizByOptions: async (entities, count = 20, chapter = [{ start: '1', end: '10' }], kind, options_lst) => {
     try {
       const response = {
         answer_with_meaning: [],
@@ -70,19 +70,19 @@ module.exports = {
       for (let option of options_lst) {
         switch (option) {
           case options.answerWithMeaning:
-            const answerMeaning = await strapi.services.kanji.questionForm(entities, count, chapter, options.answerWithMeaning);
+            const answerMeaning = await strapi.services.kanji.questionForm(entities, count, chapter, kind, options.answerWithMeaning);
             response.answer_with_meaning = answerMeaning;
             break;
           case options.answerWithKanji:
-            const answerKanji = await strapi.services.kanji.questionForm(entities, count, chapter, options.answerWithKanji);
+            const answerKanji = await strapi.services.kanji.questionForm(entities, count, chapter, kind, options.answerWithKanji);
             response.answer_with_kanji = answerKanji;
             break;
           case options.answerWithKunyoumi:
-            const answerKunyoumi = await strapi.services.kanji.questionForm(entities, count, chapter, options.answerWithKunyoumi);
+            const answerKunyoumi = await strapi.services.kanji.questionForm(entities, count, chapter, kind, options.answerWithKunyoumi);
             response.answer_with_kunyomi = answerKunyoumi;
             break;
           case options.answerWithOnyoumi:
-            const answerOnyoumi = await strapi.services.kanji.questionForm(entities, count, chapter, options.answerWithOnyoumi);
+            const answerOnyoumi = await strapi.services.kanji.questionForm(entities, count, chapter, kind, options.answerWithOnyoumi);
             response.answer_with_onyomi = answerOnyoumi;
             break;
           case options.answerWithPictures:
@@ -98,10 +98,10 @@ module.exports = {
     }
   },
 
-  questionForm: async (entities, count, chapter, kind) => {
+  questionForm: async (entities, count, chapter, kind, opts) => {
     const response = [];
     let meaning_list = [];
-    switch (kind) {
+    switch (opts) {
       case options.answerWithMeaning:
         meaning_list = strapi.services.kanji.getMeaningList(entities, options.answerWithMeaning);
         break;
@@ -134,11 +134,11 @@ module.exports = {
     }
     await Promise.all(randomMeaning.map(word => {
       let meanings = _.cloneDeep(meaning_list);
-      meanings = strapi.services.kanji.filterMeaning(meaning_list, word, kind);
+      meanings = strapi.services.kanji.filterMeaning(meaning_list, word, opts);
       let answer_list = strapi.services.kanji.getRandom(meanings, 5);
-      answer_list.push(strapi.services.kanji.getAnswerList(word, kind));
+      answer_list.push(strapi.services.kanji.getAnswerList(word, opts));
       answer_list = strapi.services.kanji.shuffle(answer_list);
-      const quiz = strapi.services.kanji.getShuffleQuiz(word, answer_list, kind);
+      const quiz = strapi.services.kanji.getShuffleQuiz(word, answer_list, opts);
       response.push(quiz);
     }));
     return response;

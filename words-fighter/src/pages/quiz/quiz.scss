@@ -1,7 +1,7 @@
 .quiz {
   .main {
     display: block;
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
     .head {
       text-align: center;
@@ -53,6 +53,15 @@
           cursor: pointer;
         }
       }
+    }
+    .complete-btn {
+      display: block;
+      width: 10vw;
+      padding: 15px;
+      border: 0;
+      border-radius: 22px;
+      background-color: #8dbcf4;
+      margin: 30px auto;
     }
   }
 }
