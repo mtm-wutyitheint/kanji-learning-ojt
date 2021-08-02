@@ -13,7 +13,7 @@ module.exports = {
     }
     const isExist = await strapi.services.players.findOne(player);
     if (isExist === null) {
-      return ctx.send({status: "login fail!!! username or password invalid"}, 400);
+      return ctx.send({status: "fail"}, 400);
     }
     return {
       status: 'success',
