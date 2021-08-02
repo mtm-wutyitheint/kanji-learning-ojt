@@ -71,3 +71,30 @@
     }
   }
 }
+.pagination  {
+  width: 60%;
+  margin: 50px auto;
+  display: flex;
+  list-style: none;
+  outline: none;
+  
+   .active {
+      a, span, a:hover, span:hover, a:focus, span:focus{
+        background-color: #E91E63  ;
+        border-color: #E91E63 ;
+        outline: none ;
+      }
+   }
+   li {
+      a{
+        border: 1px solid #EB9FA1   ;
+        padding: 5px 10px;
+        outline: none;
+        list-style: none;
+        cursor: pointer;
+      }
+      span {
+        color: #E91E63 
+      }
+   } 
+}
