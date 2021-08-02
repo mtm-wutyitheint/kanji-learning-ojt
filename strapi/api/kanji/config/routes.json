@@ -55,6 +55,14 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "GET",
+      "path": "/quiz",
+      "handler": "kanji.quiz",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

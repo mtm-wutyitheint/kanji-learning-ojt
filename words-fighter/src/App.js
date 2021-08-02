@@ -7,6 +7,7 @@ import {
 import CommingSoon from "./pages/comming-soon";
 import Content from './pages/content';
 import Learn from "./pages/learn";
+import Quiz from "./pages/quiz/quiz";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Profile from "./pages/profile/profile";
@@ -27,6 +28,9 @@ function App() {
         </Route>
         <Route path="/learn">
           <Learn />
+        </Route>
+        <Route path="/quiz">
+          <Quiz />
         </Route>
         <Route path="/profile">
           <Profile />
