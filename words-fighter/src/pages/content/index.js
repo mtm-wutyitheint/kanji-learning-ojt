@@ -13,7 +13,9 @@ function Content() {
       <div className="content-section">
         <div className="main-section">
           <div className="section">
-            <Link to="/learn">
+            <Link to={{
+              pathname: "/learn",
+            }}>
               <div className="link">
                 <p>Learn</p>
               </div>
