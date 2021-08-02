@@ -7,6 +7,8 @@ import {
 import CommingSoon from "./pages/comming-soon";
 import Content from './pages/content';
 import Learn from "./pages/learn";
+import Login from "./pages/login";
+import Signup from "./pages/signup";
 import Profile from "./pages/profile/profile";
 import Top from './pages/top/top';
 
@@ -29,8 +31,14 @@ function App() {
         <Route path="/profile">
           <Profile />
         </Route>
+        <Route path="/signup">
+          <Signup />
+        </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
         <Route path="/">
-          <Redirect to="/top"></Redirect>
+          <Redirect to="/signup"></Redirect>
         </Route>
       </Switch>
     </Router>

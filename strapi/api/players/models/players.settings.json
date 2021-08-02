@@ -44,6 +44,9 @@
     "practise_record": {
       "collection": "n5-score",
       "via": "player"
+    },
+    "email": {
+      "type": "email"
     }
   }
 }

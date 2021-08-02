@@ -2,6 +2,14 @@ import React from 'react';
 import kanjiPic from '../../img/kanji.png';
 import "./learn.scss";
 import KanjiDetail from '../../components/kanji-detail';
+import { withRouter } from 'react-router-dom';
+import Pagination from "./Pagination";
+
+const defaultProps = {
+  data: [],
+  pageOfItems: [],
+  level: ''
+}
 
 class Learn extends React.Component {
   constructor(props) {
@@ -9,57 +17,27 @@ class Learn extends React.Component {
     this.state = {
       dialogOpen: false,
       selectedIndex: null,
-      data: [
-        {
-          id: 1,
-          kanji: "日",
-          meaning: "Day",
-          onyomi: "ニチ, ジツ",
-          kunyomi: "ひ, -び, -か",
-          onRomaji: "nichi, jitsu",
-          kunRomaji: "hi, -bi, -ka"
-        },
-        {
-          id: 2,
-          kanji: "一",
-          meaning: "one",
-          onyomi: "イチ",
-          kunyomi: "ひと(つ)",
-          onRomaji: "ichi",
-          kunRomaji: "hito(tsu)"
-        },
-        {
-          id: 3,
-          kanji: "国",
-          meaning: "country",
-          onyomi: "コク",
-          kunyomi: "くに",
-          onRomaji: "koku",
-          kunRomaji: "kuni"
-        },
-        {
-          id: 4,
-          kanji: "人",
-          meaning: "Person",
-          onyomi: "ジン、 ニン",
-          kunyomi: "ひと",
-          onRomaji: "jin, nin",
-          kunRomaji: "hito"
-        },
-        {
-          id: 5,
-          kanji: "年",
-          meaning: "years",
-          onyomi: "ネン",
-          kunyomi: "とし",
-          onRomaji: "toshi",
-          kunRomaji: "hito"
-        }
-      ]
+      data: [],
+      pageOfItems: [],
+      inputvalue: ''
     }
-    this.kind = 'N5';
+    defaultProps.level  = localStorage.getItem('level')
+    this.kind = defaultProps.level ;
     // this.openDialog = this.openDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
+    this.onChangePage = this.onChangePage.bind(this);
+    this.search = this.search.bind(this)
+  }
+  componentDidMount() {
+    const apiUrl = defaultProps.level === 'N5' ? 'http://localhost:1337/kanjis?level=N5' : 
+                                                 'http://localhost:1337/kanjis?level=N4';
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ data: data })
+        defaultProps.data = data;
+      })
+      .catch((error) => console.log(error));
   }
   openDialog(id) {
     this.setState({ dialogOpen: true, selectedIndex: id });
@@ -67,36 +45,63 @@ class Learn extends React.Component {
   closeDialog() {
     this.setState({ dialogOpen: false, selectedIndex: null });
   }
+  search = (event) => {
+    this.setState({
+      data: defaultProps.data.filter(item => {
+        return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase()) ||
+               item.kanji.toLowerCase().includes(event.target.value.toLowerCase()) ||
+               item.meaning.toLowerCase().includes(event.target.value.toLowerCase())
+      })
+    });
+    this.setState({
+      pageOfItems: this.state.data.filter(item => {
+        return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase())
+      })
+    })
+    if (event.target.value.length < 1) {
+      this.setState({ pageOfItems: defaultProps.pageOfItems, data: defaultProps.data })
+    }
+  }
+  onChangePage(pageOfItems) {
+    // update state with new page of items
+    this.setState({ pageOfItems: pageOfItems })
+    defaultProps.pageOfItems = pageOfItems;
+  }
   render() {
     return (
       <div className="learn">
-        <h1 className="header">Learn {this.kind} kanji</h1>
+        <h1 className="header">Learn {this.kind} kanji </h1>
         <div className="chapter-selection clearFix">
-          <p className="next-chap">Next Chapter <i className="arrow right"></i></p>
+          <input
+            className="find clearFix"
+            type="text"
+            placeholder="Search"
+            onChange={this.search}
+          ></input>
         </div>
         <div className="container">
-          <form className="clearFix">
-            <input
-              className='find'
-              type="text"
-              placeholder="Find"></input>
-          </form>
-          {this.state.data.map((words) => {
+          {this.state.pageOfItems.map((words) => {
             return (
               <div
                 onClick={() => this.openDialog(words.id)}
                 key={words.id}
                 className="block clearFix">
-                  <p className="mean">
-                    <span className="kanji">{words.kanji}</span>
-                    ({words.kunRomaji}) = {words.meaning}</p>
-                  <img className="logo" src={kanjiPic} alt="kanji logo"></img>
+                <p className="mean">
+                  <span className="kanji">{words.kanji}</span>
+                  ({words.kunRomaji}) = {words.meaning}</p>
+                <img className="logo" src={kanjiPic} alt="kanji logo"></img>
               </div>
             )
           })}
         </div>
-        <div className="chapter-selection clearFix">
-          <p className="next-chap">Next Chapter <i className="arrow right"></i></p>
+        <div>
+          {this.state.data.length > 0 ? (
+            <>
+              <Pagination data={this.state.data} showPage='true' onChangePage={this.onChangePage} />
+            </>
+          ) : (
+            <h1>No Posts to display</h1>
+          )}
         </div>
         <KanjiDetail
           open={this.state.dialogOpen}
@@ -108,4 +113,4 @@ class Learn extends React.Component {
   }
 }
 
-export default Learn;
+export default withRouter(Learn);
