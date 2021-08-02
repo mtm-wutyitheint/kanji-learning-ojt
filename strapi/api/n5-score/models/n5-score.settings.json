@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "n5_scores",
+  "info": {
+    "name": "n5_Score"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "score": {
+      "type": "integer"
+    },
+    "total": {
+      "type": "integer"
+    },
+    "answer_data": {
+      "type": "datetime"
+    },
+    "player": {
+      "via": "practise_record",
+      "model": "players"
+    }
+  }
+}

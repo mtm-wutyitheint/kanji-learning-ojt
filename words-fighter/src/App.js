@@ -9,6 +9,7 @@ import Content from './pages/content';
 import Learn from "./pages/learn";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
+import Profile from "./pages/profile/profile";
 import Top from './pages/top/top';
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
         </Route>
         <Route path="/learn">
           <Learn />
+        </Route>
+        <Route path="/profile">
+          <Profile />
         </Route>
         <Route path="/signup">
           <Signup />
