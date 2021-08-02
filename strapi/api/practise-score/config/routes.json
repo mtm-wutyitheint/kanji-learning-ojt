@@ -2,48 +2,48 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/n-5-scores",
-      "handler": "n5-score.find",
+      "path": "/practise-scores",
+      "handler": "practise-score.find",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/n-5-scores/count",
-      "handler": "n5-score.count",
+      "path": "/practise-scores/count",
+      "handler": "practise-score.count",
       "config": {
         "policies": []
       }
     },
     {
       "method": "GET",
-      "path": "/n-5-scores/:id",
-      "handler": "n5-score.findOne",
+      "path": "/practise-scores/:id",
+      "handler": "practise-score.findOne",
       "config": {
         "policies": []
       }
     },
     {
       "method": "POST",
-      "path": "/n-5-scores",
-      "handler": "n5-score.create",
+      "path": "/practise-scores",
+      "handler": "practise-score.create",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/n-5-scores/:id",
-      "handler": "n5-score.update",
+      "path": "/practise-scores/:id",
+      "handler": "practise-score.update",
       "config": {
         "policies": []
       }
     },
     {
       "method": "DELETE",
-      "path": "/n-5-scores/:id",
-      "handler": "n5-score.delete",
+      "path": "/practise-scores/:id",
+      "handler": "practise-score.delete",
       "config": {
         "policies": []
       }

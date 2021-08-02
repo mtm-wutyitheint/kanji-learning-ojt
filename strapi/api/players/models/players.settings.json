@@ -41,12 +41,16 @@
     "time_taken": {
       "type": "string"
     },
-    "practise_record": {
-      "collection": "n5-score",
-      "via": "player"
-    },
     "email": {
       "type": "email"
+    },
+    "practise_scores": {
+      "via": "player",
+      "collection": "practise-score"
+    },
+    "exam_scores": {
+      "via": "player",
+      "collection": "exam-score"
     }
   }
 }

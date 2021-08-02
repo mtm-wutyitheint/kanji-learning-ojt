@@ -14,63 +14,100 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function KanjiDetail(props) {
-
+  const [kanjiItem, setKanjiItem] = React.useState(null);
+  const [currentIndex, setCurrentIndex] = React.useState(null);
   const { open, close, data, index } = props;
 
-  let showList = [];
-  if (data && data.length > 0) {
-    showList = data.filter(list => {
-      return list.id === index;
-    })
+  const setCurrent = () => {
+    if (currentIndex) {
+      setCurrentIndex(currentIndex);
+    } else if (data && data.length > 0) {
+      const current = _.findIndex(data, { id: index });
+      if (current !== -1) {
+        setCurrentIndex(current);
+      }
+    }
   }
-  let currentIndex = _.findIndex(data, d => d.id === index);
-  let pageCount = String(currentIndex + 1) + "/" + String(data.length)
 
-  let mock = showList.length === 0 ? null : showList[0];
+  const setDetail = (current) => {
+    const res = current === -1 ? null : data[current];
+    setKanjiItem(res);
+  }
+
+  const handlePrevious = () => {
+    const previousIndex = currentIndex - 1;
+    if (previousIndex >= 0 && previousIndex < data.length) {
+      setCurrentIndex(currentIndex - 1);
+      setKanjiItem(data[currentIndex]);
+    }
+  }
+
+  const handleNext = () => {
+    const nextIndex = currentIndex + 1;
+    if (nextIndex >= 0 && nextIndex < data.length) {
+      setCurrentIndex(currentIndex + 1);
+      setKanjiItem(data[currentIndex]);
+    }
+  }
+
+  const dialogClose = () => {
+    setCurrentIndex(null);
+    setKanjiItem(null);
+    close();
+  }
+
+  React.useEffect(() => {
+    setCurrent();
+    setDetail(currentIndex);
+  });
+
+  let pageCount = String(currentIndex + 1) + " of " + String(data.length);
   return (
     <div>
-      {mock ?
+      {kanjiItem ?
         <Dialog
           open={open}
           TransitionComponent={Transition}
           keepMounted
-          onClose={close}
+          onClose={() => dialogClose()}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle id="alert-dialog-slide-title">{mock.kanji} [ {mock.kunRomaji} ]</DialogTitle>
+          <DialogTitle id="alert-dialog-slide-title">{kanjiItem.kanji} [ {kanjiItem.kunRomaji} ]</DialogTitle>
           <DialogContent>
             <div className="clearFix">
               <ul className="meaning-lst">
                 <li>Meaning</li>
                 <ul>
-                  <li>{mock.meaning}</li>
+                  <li>{kanjiItem.meaning}</li>
                 </ul>
                 <li>Onyomi</li>
                 <ul>
-                  <li>{mock.onyomi}</li>
-                  <li>{mock.onRomaji}</li>
+                  <li>{kanjiItem.onyomi}</li>
+                  <li>{kanjiItem.onRomaji}</li>
                 </ul>
                 <li>Kunyomi</li>
                 <ul>
-                  <li>{mock.kunyomi}</li>
-                  <li>{mock.kunRomaji}</li>
+                  <li>{kanjiItem.kunyomi}</li>
+                  <li>{kanjiItem.kunRomaji}</li>
                 </ul>
-                <li>Examples</li>
+                {/* <li>Examples</li>
                 <ul>
                   <li>This is an example text.</li>
                   <li>This is an example text.</li>
-                </ul>
+                </ul> */}
               </ul>
-              <img className="kanji-example" src={kanjiPic} alt={mock.kunRomaji}></img>
+              <img className="kanji-example" src={kanjiPic} alt={kanjiItem.kunRomaji}></img>
             </div>
             <p className="page-count">
+              <button onClick={handlePrevious}>Previous</button>
               {pageCount}
+              <button onClick={handleNext}>Next</button>
             </p>
 
           </DialogContent>
           <DialogActions>
-            <Button onClick={close} color="primary">
+            <Button onClick={() => dialogClose()} color="primary">
               close
             </Button>
           </DialogActions>

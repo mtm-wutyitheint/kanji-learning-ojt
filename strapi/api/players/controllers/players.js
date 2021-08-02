@@ -18,6 +18,7 @@ module.exports = {
     return {
       status: 'success',
       name: isExist.name,
+      id: isExist.id
     }
   }
 };
