@@ -4,6 +4,8 @@ import "./learn.scss";
 import KanjiDetail from '../../components/kanji-detail';
 import { withRouter } from 'react-router-dom';
 import Pagination from "./Pagination";
+import axios from 'axios';
+import { env } from '../../env/development';
 
 const defaultProps = {
   data: [],
@@ -21,21 +23,18 @@ class Learn extends React.Component {
       pageOfItems: [],
       inputvalue: ''
     }
-    defaultProps.level  = localStorage.getItem('level')
-    this.kind = defaultProps.level ;
-    // this.openDialog = this.openDialog.bind(this);
+    defaultProps.level = localStorage.getItem('level')
+    this.kind = defaultProps.level;
     this.closeDialog = this.closeDialog.bind(this);
     this.onChangePage = this.onChangePage.bind(this);
     this.search = this.search.bind(this)
   }
   componentDidMount() {
-    const apiUrl = defaultProps.level === 'N5' ? 'http://localhost:1337/kanjis?level=N5' : 
-                                                 'http://localhost:1337/kanjis?level=N4';
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ data: data })
-        defaultProps.data = data;
+    axios.get(env.apiEndPoint + '/kanjis', { params: { level: this.kind } })
+      .then((response) => {
+        console.log(response);
+        this.setState({ data: response.data })
+        defaultProps.data = response.data;
       })
       .catch((error) => console.log(error));
   }
@@ -49,8 +48,8 @@ class Learn extends React.Component {
     this.setState({
       data: defaultProps.data.filter(item => {
         return item.kunRomaji.toLowerCase().includes(event.target.value.toLowerCase()) ||
-               item.kanji.toLowerCase().includes(event.target.value.toLowerCase()) ||
-               item.meaning.toLowerCase().includes(event.target.value.toLowerCase())
+          item.kanji.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          item.meaning.toLowerCase().includes(event.target.value.toLowerCase())
       })
     });
     this.setState({
@@ -63,7 +62,6 @@ class Learn extends React.Component {
     }
   }
   onChangePage(pageOfItems) {
-    // update state with new page of items
     this.setState({ pageOfItems: pageOfItems })
     defaultProps.pageOfItems = pageOfItems;
   }
@@ -95,19 +93,17 @@ class Learn extends React.Component {
           })}
         </div>
         <div>
-          {this.state.data.length > 0 ? (
-            <>
-              <Pagination data={this.state.data} showPage='true' onChangePage={this.onChangePage} />
-            </>
-          ) : (
-            <h1>No Posts to display</h1>
-          )}
+          {this.state.data.length > 0 &&
+            <Pagination data={this.state.data} showPage='true' onChangePage={this.onChangePage} />
+          }
         </div>
-        <KanjiDetail
-          open={this.state.dialogOpen}
-          close={this.closeDialog}
-          data={this.state.data}
-          index={this.state.selectedIndex} />
+        {this.state.pageOfItems.length > 0 &&
+          <KanjiDetail
+            open={this.state.dialogOpen}
+            close={this.closeDialog}
+            data={this.state.pageOfItems}
+            index={this.state.selectedIndex} />
+        }
       </div>
     )
   }

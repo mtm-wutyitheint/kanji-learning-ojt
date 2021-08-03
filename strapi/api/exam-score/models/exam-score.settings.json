@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "exam_scores",
+  "info": {
+    "name": "examScore"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "score": {
+      "type": "integer",
+      "required": true
+    },
+    "total": {
+      "type": "integer",
+      "required": true
+    },
+    "answer_date": {
+      "type": "datetime",
+      "required": true
+    },
+    "player": {
+      "model": "players",
+      "via": "exam_scores"
+    }
+  }
+}

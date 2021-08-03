@@ -1,6 +1,9 @@
 import React from 'react';
 import ScoreResult from '../../components/score-result/score-result';
-import "./profile.scss"
+import "./profile.scss";
+import axios from "axios";
+import { env } from "../../env/development"
+import _ from "lodash";
 
 class Profile extends React.Component {
   constructor() {
@@ -11,122 +14,8 @@ class Profile extends React.Component {
       n5Score: 0,
       n4Score: 0,
       image: {},
-      examRecord: [
-        {
-          id: 1,
-          score: 30,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 2,
-          score: 35,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 3,
-          score: 34,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 4,
-          score: 10,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 5,
-          score: 30,
-          total: 40,
-          level: 'N4',
-          date: '7/29/2021'
-        },
-        {
-          id: 6,
-          score: 35,
-          total: 40,
-          level: 'N4',
-          date: '7/29/2021'
-        },
-        {
-          id: 7,
-          score: 34,
-          total: 40,
-          level: 'N4',
-          date: '7/29/2021'
-        },
-        {
-          id: 5,
-          score: 10,
-          total: 40,
-          level: 'N4',
-          date: '7/29/2021'
-        }
-      ],
-      practiseRecord: [
-        {
-          id: 1,
-          score: 30,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 2,
-          score: 35,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 3,
-          score: 34,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 4,
-          score: 10,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 5,
-          score: 30,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 6,
-          score: 35,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 7,
-          score: 34,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        },
-        {
-          id: 8,
-          score: 10,
-          total: 40,
-          level: 'N5',
-          date: '7/29/2021'
-        }
-      ],
+      examRecord: [],
+      practiseRecord: [],
       examRecordN5: [],
       examRecordN4: [],
       practiseRecordN5: [],
@@ -141,20 +30,34 @@ class Profile extends React.Component {
     let examN4 = [];
     let practiseN5 = [];
     let practiseN4 = [];
-    if (this.state.examRecord && this.state.examRecord.length > 0) {
-      examN5 = this.state.examRecord.filter(e => e.level === 'N5');
-      examN4 = this.state.examRecord.filter(e => e.level === 'N4');
-    }
-    if (this.state.practiseRecord && this.state.practiseRecord.length > 0) {
-      practiseN5 = this.state.practiseRecord.filter(e => e.level === 'N5');
-      practiseN4 = this.state.practiseRecord.filter(e => e.level === 'N4');
-    }
-    this.setState({
-      examRecordN5: examN5,
-      examRecordN4: examN4,
-      practiseRecordN5: practiseN5,
-      practiseRecordN4: practiseN4,
-    })
+    const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+    axios.get(env.apiEndPoint + '/players/' + loginUser.id)
+      .then(response => {
+        console.log(response.data);
+        const player = response.data;
+        this.setState({
+          name: player.name,
+          n5Score: player.current_n5_score,
+          n4Score: player.current_n4_score,
+          examRecord: player.exam_scores,
+          practiseRecord: player.practise_scores,
+          image: player.profile[0]
+        })
+        if (this.state.examRecord && this.state.examRecord.length > 0) {
+          examN5 = this.state.examRecord.filter(e => e.level === 'N5');
+          examN4 = this.state.examRecord.filter(e => e.level === 'N4');
+        }
+        if (this.state.practiseRecord && this.state.practiseRecord.length > 0) {
+          practiseN5 = this.state.practiseRecord.filter(e => e.level === 'N5');
+          practiseN4 = this.state.practiseRecord.filter(e => e.level === 'N4');
+        }
+        this.setState({
+          examRecordN5: examN5,
+          examRecordN4: examN4,
+          practiseRecordN5: practiseN5,
+          practiseRecordN4: practiseN4,
+        })
+      })
   }
   handleOnChange(event) {
     this.setState({
@@ -164,8 +67,11 @@ class Profile extends React.Component {
   fileImageChange(files) {
     console.log('file : ', files);
   }
-  handleSubmit() {
-    console.log(this.state);
+  handleSubmit(event) {
+    event.preventDefault();
+    const user = _.cloneDeep(this.state);
+    console.log(user);
+
   }
   render() {
     return (
