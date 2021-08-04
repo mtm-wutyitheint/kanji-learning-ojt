@@ -42,9 +42,11 @@
     border-left: none;
     border-right: none;
     border-bottom: solid #000000 1px;
-    padding: 3px 10px;
-    font-size: 20px;
+    padding: 3px 12px 3px 5px;
+    font-size: 16px;
     box-sizing: border-box;
+    // margin-right: 20%;
+    margin: 10px 20% 10px 0;
   }
   .block {
     // display: block;
@@ -133,11 +135,12 @@
       font-size: 1.5em;
     }
     .find {
+      width: 30%;
       float: right;
-      margin-right: 15px;
+      margin-right: 14%;
       margin-bottom: 12px;
-      padding: 1px 2px;
-      font-size: 12px;
+      padding: 1px 0 3px 2px;
+      font-size: 11px;
     }
     .block{
       width: 35%;
