@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import "./login.scss";
+import "../signup/signup.scss";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 import { env } from "../../env/development";
 import axios from "axios";
+import halfBg from '../../img/aa.png';
 
 class Login extends Component {
   constructor(props) {
@@ -55,13 +56,20 @@ class Login extends Component {
     let alertTitle = this.state.success === true ? 'Login Sucess!' : 'Login Failed! Please Try again...';
     let route = this.state.success === true ? '/top' : '/login';
     return (
-      <div className="login">
-        <div className="content-logo">
-          <div className="content-log2"></div>
+      <div className="signup">
+        <div className="img-bg clearFix">
+          <p className="upper">A new Language is a New Life 
+          <span className="under_text">新しい言語は新しい人生の始まり</span>
+          </p>
+          <img className="img" src={halfBg} alt="decorate"></img>
         </div>
         <form onSubmit={this.singup} className="form">
-          <input className="input" name="name" value={this.state.name} placeholder="Name" onChange={this.handleChange}></input>
-          <input className="input" type="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChange}></input>
+          <div className="name-wrap">
+            <input className="input" name="name" value={this.state.name} placeholder="Name" onChange={this.handleChange}></input>
+          </div>
+          <div className="password-wrap">
+            <input className="input" type="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChange}></input>
+          </div>
           <button className="text-center" disabled={(this.state.name.length === 0 || this.state.password.length === 0)}>Login</button>
         </form>
         <Dialog

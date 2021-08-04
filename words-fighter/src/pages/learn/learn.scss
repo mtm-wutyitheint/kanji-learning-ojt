@@ -71,6 +71,7 @@
     }
   }
 }
+
 .pagination  {
   width: 60%;
   margin: 50px auto;
@@ -79,13 +80,16 @@
   outline: none;
   
    .active {
+    
       a, span, a:hover, span:hover, a:focus, span:focus{
         background-color: #E91E63  ;
         border-color: #E91E63 ;
         outline: none ;
       }
    }
+   
    li {
+     margin: 5px;
       a{
         border: 1px solid #EB9FA1   ;
         padding: 5px 10px;
@@ -98,3 +102,14 @@
       }
    } 
 }
+
+@media only screen and (max-width: 1024px) {
+    .pagination{
+      width: 50%;
+      margin: 0 auto;
+    .hole{
+     visibility: hidden;
+     width: 0;
+    }
+  }  
+ }
