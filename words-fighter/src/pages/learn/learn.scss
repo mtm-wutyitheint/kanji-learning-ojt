@@ -132,18 +132,21 @@
     .find {
       float: right;
       margin-right: 15px;
+      margin-bottom: 12px;
       padding: 1px 2px;
       font-size: 12px;
     }
     .block{
-      width: 45%;
+      width: 35%;
       height: 6em;
-      margin: 8px 2.5%;
+      margin: 8px 13.5%;
       padding: 8px;
       cursor: pointer;
       float: left;
       box-shadow: 5px 5px #888888;
       box-sizing: border-box;
+      display: flex;
+      align-items: center;
       .mean {
         width: 100%;
         margin: 0 auto;
@@ -152,7 +155,7 @@
         .kanji {
           font-size: 15px;
           font-weight: bold;
-          margin-right: 15px;
+          margin-right: 0;
           display: block;
           text-align: center;
         }
@@ -160,13 +163,17 @@
       .logo {
         visibility: hidden;
         width: 0;
+        margin-right: 0;
       }
      }
-     .block:nth-child( odd ) {
+    .block:nth-child( odd ) {
       margin-right: 1.5%;
-  }
+    }
+    .block:nth-child( even ) {
+      margin-left: 1.5%;
+    }
     .pagination{
-      width: 95%;
+      width: 74%;
       margin: 0 auto;
       padding: 0;
       li{
