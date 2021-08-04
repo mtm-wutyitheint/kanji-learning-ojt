@@ -13,7 +13,6 @@
         border-radius: 15vw;
         overflow: hidden;
         .image {
-          background-image: url("../../img/profile_picture.png");
           height: 100%;
           position: relative;
           background-position: center;
@@ -41,21 +40,15 @@
       .form-label {
         width: 25vw;
         display: block;
-        margin: 1vh auto;
+        margin: 0 auto;
+        padding: 1.7vh;
       }
       .form-field {
         width: 25vw;
         display: block;
-        margin: 3vh auto;
-        background-color: transparent;
-        color: #000000;
-        outline: none;
-        outline-style: none;
-        border-top: none;
-        border-left: none;
-        border-right: none;
-        border-bottom: solid #000000 1px;
+        margin: 0 auto;
         font-size: 15px;
+        padding: 1.7vh;
       }
       .form-btn {
         width: 25vw;
@@ -65,24 +58,25 @@
         outline-style: none;
         .btn-save {
           float: right;
-          width: 6vw;
+          width: 30%;
           height: 8vh;
           background-color: #8dbcf4;
           border: 0;
           border-radius: 1vw;
-          font-size: 15px;
+          font-size: 18px;
+          margin: 20px 0;
         }
       }
     }
   }
   .record {
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
+    display: block;
+    background-color: #fff;
+    padding: 10px;
+    margin: 40px 0;
     .record-container {
-      width: 40%;
-      flex: auto;
-      margin: 10px;
+      margin: 20px 10px;
       .record-sub-container {
         display: block;
         width: 100%;

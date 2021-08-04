@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "practise_scores",
   "info": {
-    "name": "practiseScore"
+    "name": "practiseScore",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -24,8 +25,8 @@
       "required": true
     },
     "player": {
-      "model": "players",
-      "via": "practise_scores"
+      "via": "practise_scores",
+      "model": "players"
     },
     "kind": {
       "type": "enumeration",
@@ -36,6 +37,17 @@
     },
     "chapters": {
       "type": "richtext"
+    },
+    "level": {
+      "type": "enumeration",
+      "enum": [
+        "N5",
+        "N4"
+      ],
+      "required": true
+    },
+    "random_count": {
+      "type": "integer"
     }
   }
 }

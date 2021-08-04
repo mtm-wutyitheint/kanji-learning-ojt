@@ -13,7 +13,8 @@ import Quiz from "./pages/quiz/quiz";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Profile from "./pages/profile/profile";
-import Top from './pages/top/top'
+import Top from './pages/top/top';
+import TopNav from "./components/top-navigation/top-nav";
 
 function App() {
   const protectedRoutes = [
@@ -28,6 +29,7 @@ function App() {
   return (
 
     <Router>
+      <TopNav />
       <Switch>
         {protectedRoutes.map((route, i) => {
           return (

@@ -13,6 +13,10 @@ const isAuth = () => {
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
   // console.log('login user ===> ', loginUser);
 
+  if(loginUser === 'guest') {
+    return true;
+  }
+
   if (!loginUser || loginUser.status !== 'success' ||
     !('name' in loginUser) || !('id' in loginUser) ||
     !loginUser.name || !loginUser.id) {

@@ -4,16 +4,19 @@ import "./profile.scss";
 import axios from "axios";
 import { env } from "../../env/development"
 import _ from "lodash";
+import playerProfile from '../../img/profile_picture.png'
 
 class Profile extends React.Component {
   constructor() {
     super();
     this.state = {
-      name: 'naing aung lwin',
+      id: 0,
+      name: '',
       password: '',
       n5Score: 0,
       n4Score: 0,
       image: {},
+      profilePicture: {},
       examRecord: [],
       practiseRecord: [],
       examRecordN5: [],
@@ -33,15 +36,17 @@ class Profile extends React.Component {
     const loginUser = JSON.parse(localStorage.getItem('loginUser'));
     axios.get(env.apiEndPoint + '/players/' + loginUser.id)
       .then(response => {
-        console.log(response.data);
         const player = response.data;
         this.setState({
+          id: player.id,
           name: player.name,
           n5Score: player.current_n5_score,
           n4Score: player.current_n4_score,
           examRecord: player.exam_scores,
           practiseRecord: player.practise_scores,
-          image: player.profile[0]
+          image: player.profile ?
+            env.apiEndPoint + player.profile.url :
+            playerProfile
         })
         if (this.state.examRecord && this.state.examRecord.length > 0) {
           examN5 = this.state.examRecord.filter(e => e.level === 'N5');
@@ -49,7 +54,9 @@ class Profile extends React.Component {
         }
         if (this.state.practiseRecord && this.state.practiseRecord.length > 0) {
           practiseN5 = this.state.practiseRecord.filter(e => e.level === 'N5');
+          practiseN5 = this.chapterToList(practiseN5);
           practiseN4 = this.state.practiseRecord.filter(e => e.level === 'N4');
+          practiseN4 = this.chapterToList(practiseN4);
         }
         this.setState({
           examRecordN5: examN5,
@@ -59,18 +66,75 @@ class Profile extends React.Component {
         })
       })
   }
+  chapterToList(practiseItems) {
+    _.map(practiseItems, practise => {
+      practise.chapters = practise.chapters ?
+        practise.chapters.split(',') : [];
+    })
+    return practiseItems
+  }
   handleOnChange(event) {
     this.setState({
-      [event.target.name]: [event.target.value]
+      [event.target.name]: event.target.value
     })
   }
   fileImageChange(files) {
-    console.log('file : ', files);
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({
+        image: reader.result,
+        profilePicture: files[0]
+      })
+    };
+    reader.onerror = () => {
+      console.error(reader.error);
+    };
+    reader.readAsDataURL(files[0]);
   }
+
+  updateProfile(data, id) {
+    axios.put(env.apiEndPoint + '/players/' + id, data)
+      .then(() => {
+        console.log('update profile success');
+        this.setState({
+          id: 0,
+          name: '',
+          password: '',
+          n5Score: 0,
+          n4Score: 0,
+          image: {},
+          profilePicture: {},
+          examRecord: [],
+          practiseRecord: [],
+          examRecordN5: [],
+          examRecordN4: [],
+          practiseRecordN5: [],
+          practiseRecordN4: []
+        })
+      })
+      .catch(err => console.error(err))
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     const user = _.cloneDeep(this.state);
-    console.log(user);
+    const userId = this.state.id;
+    let data = {};
+    if (user.name) {
+      data.name = user.name;
+    }
+    if (user.password) {
+      data.password = user.password;
+    }
+    if (user.profilePicture) {
+      const body = new FormData();
+      body.append('data', JSON.stringify(data));
+      body.append('files.profile', user.profilePicture);
+      JSON.stringify(body);
+      this.updateProfile(body, userId);
+    } else {
+      this.updateProfile(data, userId);
+    }
 
   }
   render() {
@@ -79,7 +143,10 @@ class Profile extends React.Component {
         <div className="profile-container">
           <div className="user-image">
             <div className="profile-image">
-              <div className="image"></div>
+              <div className="image"
+                style={{
+                  backgroundImage: `url(${this.state.image})`
+                }}></div>
             </div>
             <button
               className="img-change-btn"
@@ -137,7 +204,7 @@ class Profile extends React.Component {
             {this.state.examRecordN5.length > 0 &&
               <div className="record-sub-container">
                 <h2>Exam result of N5</h2>
-                <ScoreResult data={this.state.examRecordN5}></ScoreResult>
+                <ScoreResult mode="exam" data={this.state.examRecordN5}></ScoreResult>
               </div>
             }
           </div>
@@ -145,7 +212,7 @@ class Profile extends React.Component {
             {this.state.examRecordN4.length > 0 &&
               <div className="record-sub-container">
                 <h2>Exam result of N4</h2>
-                <ScoreResult data={this.state.examRecordN4}></ScoreResult>
+                <ScoreResult mode="exam" data={this.state.examRecordN4}></ScoreResult>
               </div>
             }
           </div>
@@ -153,16 +220,18 @@ class Profile extends React.Component {
             {this.state.practiseRecordN5.length > 0 &&
               <div className="record-sub-container">
                 <h2>Practise result of N5</h2>
-                <ScoreResult data={this.state.practiseRecordN5}></ScoreResult>
+                <ScoreResult mode="practise" data={this.state.practiseRecordN5}></ScoreResult>
               </div>
-            }</div>
+            }
+          </div>
           <div className="record-container">
             {this.state.practiseRecordN4.length > 0 &&
               <div className="record-sub-container">
                 <h2>Practise result of N4</h2>
-                <ScoreResult data={this.state.practiseRecordN4}></ScoreResult>
+                <ScoreResult mode="practise" data={this.state.practiseRecordN4}></ScoreResult>
               </div>
-            }</div>
+            }
+          </div>
         </div>
       </div>
     )
