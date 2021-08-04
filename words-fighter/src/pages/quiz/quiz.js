@@ -239,7 +239,7 @@ class Quiz extends React.Component {
     return (
       <div className="quiz">
         <div className="main">
-          <h1 className="head">Quiz</h1>
+          <h1 className="head">Quiz for {this.state.level}</h1>
           {this.state.showForm &&
             <form className="form">
               <div>
