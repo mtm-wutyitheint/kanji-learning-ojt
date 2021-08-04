@@ -76,6 +76,7 @@ export default function KanjiDetail(props) {
           <DialogTitle id="alert-dialog-slide-title">{kanjiItem.kanji} [ {kanjiItem.kunRomaji} ]</DialogTitle>
           <DialogContent>
             <div className="clearFix">
+              <img className="kanji-example" src={kanjiPic} alt={kanjiItem.kunRomaji}></img>
               <ul className="meaning-lst">
                 <li>Meaning</li>
                 <ul>
@@ -97,7 +98,8 @@ export default function KanjiDetail(props) {
                   <li>This is an example text.</li>
                 </ul> */}
               </ul>
-              <img className="kanji-example" src={kanjiPic} alt={kanjiItem.kunRomaji}></img>
+              {/* <img className="kanji-example" src={kanjiPic} alt={kanjiItem.kunRomaji}></img> */}
+
             </div>
             <p className="page-count">
               <button onClick={handlePrevious}>Previous</button>
@@ -107,7 +109,7 @@ export default function KanjiDetail(props) {
 
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => dialogClose()} color="primary">
+            <Button className="right-corner" onClick={() => dialogClose()} color="primary">
               close
             </Button>
           </DialogActions>
