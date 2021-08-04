@@ -29,7 +29,7 @@
     visibility: hidden;
   }
   .container {
-    width: 60%;
+    width: 100%;
     margin: 0 auto;
   }
   .find {
@@ -44,9 +44,11 @@
     border-bottom: solid #000000 1px;
     padding: 3px 10px;
     font-size: 20px;
+    box-sizing: border-box;
   }
   .block {
-    display: block;
+    // display: block;
+    width: 60%;
     margin: 25px auto;
     padding: 10px;
     background: white;
@@ -75,21 +77,23 @@
 .pagination  {
   width: 60%;
   margin: 50px auto;
-  display: flex;
+  padding: 0;
   list-style: none;
   outline: none;
   
    .active {
-    
       a, span, a:hover, span:hover, a:focus, span:focus{
         background-color: #E91E63  ;
         border-color: #E91E63 ;
         outline: none ;
       }
    }
-   
+   .disabled{
+    pointer-events:none; //This makes it not clickable
+    opacity:0.6;  
+   }
    li {
-     margin: 5px;
+     margin: 15px auto;
       a{
         border: 1px solid #EB9FA1   ;
         padding: 5px 10px;
@@ -101,6 +105,12 @@
         color: #E91E63 
       }
    } 
+   .next{
+     float: left;
+   }
+   .next2{
+     float: right;
+   }
 }
 
 @media only screen and (max-width: 1024px) {
@@ -113,3 +123,59 @@
     }
   }  
  }
+
+ @media only screen and (max-width: 762px) {
+   .learn{
+    .header {
+      font-size: 1.5em;
+    }
+    .find {
+      float: right;
+      margin-right: 15px;
+      padding: 1px 2px;
+      font-size: 12px;
+    }
+    .block{
+      width: 45%;
+      height: 6em;
+      margin: 8px 2.5%;
+      padding: 8px;
+      cursor: pointer;
+      float: left;
+      box-shadow: 5px 5px #888888;
+      box-sizing: border-box;
+      .mean {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        font-size: 14px;
+        .kanji {
+          font-size: 15px;
+          font-weight: bold;
+          margin-right: 15px;
+          display: block;
+          text-align: center;
+        }
+      }
+      .logo {
+        visibility: hidden;
+        width: 0;
+      }
+     }
+     .block:nth-child( odd ) {
+      margin-right: 1.5%;
+  }
+    .pagination{
+      width: 95%;
+      margin: 0 auto;
+      padding: 0;
+      li{
+        margin: 10px 5px;
+      }
+      a{
+      font-size: 12px;
+      padding: 5px;
+      }
+   }
+  }  
+}

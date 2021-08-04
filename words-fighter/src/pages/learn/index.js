@@ -77,16 +77,16 @@ class Learn extends React.Component {
             onChange={this.search}
           ></input>
         </div>
-        <div className="container">
+        <div className="container clearFix">
           {this.state.pageOfItems.map((words) => {
             return (
               <div
                 onClick={() => this.openDialog(words.id)}
                 key={words.id}
                 className="block clearFix">
-                <p className="mean">
+                <div className="mean">
                   <span className="kanji">{words.kanji}</span>
-                  ({words.kunRomaji}) = {words.meaning}</p>
+                  ({words.kunRomaji}) = {words.meaning}</div>
                 <img className="logo" src={kanjiPic} alt="kanji logo"></img>
               </div>
             )
