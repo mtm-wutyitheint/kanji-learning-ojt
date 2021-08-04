@@ -11,7 +11,6 @@ const GuardedRoute = ({ component: Component, auth, ...rest }) => (
 
 const isAuth = () => {
   const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-  // console.log('login user ===> ', loginUser);
 
   if(loginUser === 'guest') {
     return true;

@@ -32,11 +32,10 @@ class Learn extends React.Component {
   componentDidMount() {
     axios.get(env.apiEndPoint + '/kanjis', { params: { level: this.kind, _limit: -1 } })
       .then((response) => {
-        console.log(response);
         this.setState({ data: response.data })
         defaultProps.data = response.data;
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }
   openDialog(id) {
     this.setState({ dialogOpen: true, selectedIndex: id });

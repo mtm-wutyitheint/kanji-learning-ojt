@@ -123,14 +123,11 @@ class QuizComponent extends React.Component {
     // record history
     let data = {};
     const user = JSON.parse(localStorage.getItem('loginUser'));
-    console.log(user);
     const cha_lst = _.cloneDeep(this.state.chapters);
     let cha_text = '';
     _.forEach(cha_lst, lst => {
-      console.log(lst);
       cha_text += lst.label + ',';
     });
-    console.log(cha_text);
     data.player = user.id;
     data.score = correct;
     data.total = total;
@@ -138,7 +135,7 @@ class QuizComponent extends React.Component {
     data.answer_date = new Date().toISOString();
     if (this.state.mode === 'practise') {
       data.kind = this.state.kind;
-      if(data.kind === 'random') {
+      if (data.kind === 'random') {
         data.random_count = this.state.count;
       } else {
         data.chapters = cha_text;
@@ -149,6 +146,7 @@ class QuizComponent extends React.Component {
     if (this.state.mode === 'exam') {
       const route = '/exam-scores'
       this.saveRecord(data, route);
+      this.updateCurrentScore(user.id, correct, this.state.level);
     }
     const scoreResult = `You score is ${correct} of total ${total}`;
     this.setState({
@@ -167,6 +165,18 @@ class QuizComponent extends React.Component {
     ).catch(err => console.error(err))
   }
 
+  updateCurrentScore(id, score, level) {
+    let data = {};
+    if (level === 'N5') {
+      data.current_n5_score = String(score);
+    } else {
+      data.current_n4_score = String(score);
+    }
+    axios.put(`${env.apiEndPoint}/players/${id}`, data)
+      .then(() => { })
+      .catch(err => console.error(err))
+  }
+
   handleCloseDialog() {
     this.setState({
       dialogOpen: false
@@ -174,7 +184,6 @@ class QuizComponent extends React.Component {
   }
 
   backToQuiz() {
-    console.log('quiz')
     this.setState({
       mode: '',
       data: [],

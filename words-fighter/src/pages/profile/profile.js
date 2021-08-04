@@ -50,13 +50,17 @@ class Profile extends React.Component {
         })
         if (this.state.examRecord && this.state.examRecord.length > 0) {
           examN5 = this.state.examRecord.filter(e => e.level === 'N5');
+          examN5 = this.sortedByDate(examN5);
           examN4 = this.state.examRecord.filter(e => e.level === 'N4');
+          examN4 = this.sortedByDate(examN4);
         }
         if (this.state.practiseRecord && this.state.practiseRecord.length > 0) {
           practiseN5 = this.state.practiseRecord.filter(e => e.level === 'N5');
           practiseN5 = this.chapterToList(practiseN5);
+          practiseN5 = this.sortedByDate(practiseN5);
           practiseN4 = this.state.practiseRecord.filter(e => e.level === 'N4');
           practiseN4 = this.chapterToList(practiseN4);
+          practiseN4 = this.sortedByDate(practiseN4);
         }
         this.setState({
           examRecordN5: examN5,
@@ -65,6 +69,20 @@ class Profile extends React.Component {
           practiseRecordN4: practiseN4,
         })
       })
+  }
+  sortedByDate(items = []) {
+    const data = items.sort((a, b) => {
+      const aTime = new Date(a.answer_date).getTime();
+      const bTime = new Date(b.answer_date).getTime();
+      if (aTime < bTime) {
+        return 1;
+      }
+      if (aTime > bTime) {
+        return -1;
+      }
+      return 0;
+    })
+    return data;
   }
   chapterToList(practiseItems) {
     _.map(practiseItems, practise => {
@@ -95,7 +113,6 @@ class Profile extends React.Component {
   updateProfile(data, id) {
     axios.put(env.apiEndPoint + '/players/' + id, data)
       .then(() => {
-        console.log('update profile success');
         this.setState({
           id: 0,
           name: '',

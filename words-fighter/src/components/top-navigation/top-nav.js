@@ -5,14 +5,16 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import Toolbar from '@material-ui/core/Toolbar';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
   },
-  icon: {
-    float: 'right'
+  title: {
+    flexGrow: 1
   }
 }));
 
@@ -28,7 +30,7 @@ export default function TopNav() {
     if (!loginUser || loginUser.status !== 'success' ||
       !('name' in loginUser) || !('id' in loginUser) ||
       !loginUser.name || !loginUser.id) {
-        setAuth(false);
+      setAuth(false);
     } else {
       setAuth(true);
     }
@@ -59,41 +61,48 @@ export default function TopNav() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
-        <div>
-          {auth && (
-            <div className={classes.icon}>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
+      {auth && (
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" className={classes.title}>
+              <Link to="/top" style={{ textDecoration: 'none', color: 'inherit' }}>
+                Top page
+              </Link>
+            </Typography>
+            <div>
+              <div>
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </div>
             </div>
-          )}
-        </div>
-      </AppBar>
+          </Toolbar>
+        </AppBar>
+      )}
     </div>
   );
 }

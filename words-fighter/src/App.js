@@ -17,30 +17,36 @@ import Top from './pages/top/top';
 import TopNav from "./components/top-navigation/top-nav";
 
 function App() {
-  const protectedRoutes = [
-    { path: '/comming-soon', component: CommingSoon },
-    { path: '/content', component: Content },
-    { path: '/top', component: Top },
-    { path: '/learn', component: Learn },
-    { path: '/quiz', component: Quiz },
-    { path: '/profile', component: Profile }
-  ]
+  const LoginContainer = () => (
+    <div className="container">
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={Signup} />
+      <Route exact path="/" render={() => <Redirect to="/top" />} />
+    </div>
+  )
+
+  const DefaultContainer = () => (
+    <div>
+      <div className="container">
+        <TopNav />
+        <GuardedRoute path="/comming-soon" component={CommingSoon} />
+        <GuardedRoute path="/content" component={Content} />
+        <GuardedRoute path="/top" component={Top} />
+        <GuardedRoute path="/learn" component={Learn} />
+        <GuardedRoute path="/quiz" component={Quiz} />
+        <GuardedRoute path="/profile" component={Profile} />
+      </div>
+    </div>
+  )
 
   return (
 
     <Router>
-      <TopNav />
       <Switch>
-        {protectedRoutes.map((route, i) => {
-          return (
-            <GuardedRoute key={i} path={route.path} component={route.component} />
-          )
-        })}
-        <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
-        <Route path="/">
-          <Redirect to="/top"></Redirect>
-        </Route>
+        <div className="App">
+          <Route component={DefaultContainer} />
+          <Route component={LoginContainer} />
+        </div>
       </Switch>
     </Router>
   );

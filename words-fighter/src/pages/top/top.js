@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 function Top() {
   function setLevel(level) {
-    console.log(level)
     localStorage.setItem('level', level );
   }
 
