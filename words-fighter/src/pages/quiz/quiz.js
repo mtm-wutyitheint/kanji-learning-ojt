@@ -48,9 +48,14 @@ class Quiz extends React.Component {
   }
 
   componentDidMount() {
+    const level = localStorage.getItem('level');
+    this.setState({
+      level
+    })
     axios.get(env.apiEndPoint + '/kanjis/count',
       {
         params: {
+          level,
           _limit: -1
         },
         paramsSerializer: params => {
@@ -383,6 +388,10 @@ class Quiz extends React.Component {
           {(this.state.showQuiz) &&
             <QuizComponent
               mode={this.state.mode}
+              kind={this.state.kind}
+              count={this.state.count}
+              level={this.state.level}
+              chapters={this.state.selectedChapters}
               answerWithMeaning={this.state.answerWithMeaning}
               answerWithKanji={this.state.answerWithKanji}
               answerWithKunyomi={this.state.answerWithKunyomi}

@@ -2,18 +2,32 @@ import React from 'react';
 import _ from 'lodash';
 import './quiz-component.scss';
 import { Link } from 'react-router-dom';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Button from '@material-ui/core/Button';
+import axios from 'axios';
+import { env } from '../../env/development';
 
 class QuizComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       mode: '',
+      kind: '',
+      count: 0,
+      level: '',
+      chapters: [],
       data: [],
       showAnswer: false,
-      listAnswer: []
+      listAnswer: [],
+      dialogOpen: false,
+      scoreText: ''
     }
     this.allComplete = this.allComplete.bind(this);
     this.backToQuiz = this.backToQuiz.bind(this);
+    this.handleCloseDialog = this.handleCloseDialog.bind(this);
   }
 
   componentDidMount() {
@@ -51,6 +65,10 @@ class QuizComponent extends React.Component {
     }
     this.setState({
       mode: this.props.mode,
+      kind: this.props.kind,
+      count: this.props.count,
+      level: this.props.level,
+      chapters: this.props.chapters,
       data: quizData
     });
   }
@@ -102,11 +120,67 @@ class QuizComponent extends React.Component {
         });
       }
     });
+    // record history
+    let data = {};
+    const user = JSON.parse(localStorage.getItem('loginUser'));
+    const cha_lst = _.cloneDeep(this.state.chapters);
+    let cha_text = '';
+    _.forEach(cha_lst, lst => {
+      cha_text += lst.label + ',';
+    });
+    data.player = user.id;
+    data.score = correct;
+    data.total = total;
+    data.level = this.state.level;
+    data.answer_date = new Date().toISOString();
+    if (this.state.mode === 'practise') {
+      data.kind = this.state.kind;
+      if (data.kind === 'random') {
+        data.random_count = this.state.count;
+      } else {
+        data.chapters = cha_text;
+      }
+      const route = '/practise-scores'
+      this.saveRecord(data, route);
+    }
+    if (this.state.mode === 'exam') {
+      const route = '/exam-scores'
+      this.saveRecord(data, route);
+      this.updateCurrentScore(user.id, correct, this.state.level);
+    }
+    const scoreResult = `You score is ${correct} of total ${total}`;
     this.setState({
       data: stateData,
       showAnswer: true,
+      dialogOpen: true,
+      scoreText: scoreResult
     })
-    alert('You score is ' + correct + ' of total ' + total);
+  }
+
+  saveRecord(data, route) {
+    axios.post(`${env.apiEndPoint}${route}`, data).then(
+      res => {
+        console.log('save record success', res);
+      }
+    ).catch(err => console.error(err))
+  }
+
+  updateCurrentScore(id, score, level) {
+    let data = {};
+    if (level === 'N5') {
+      data.current_n5_score = String(score);
+    } else {
+      data.current_n4_score = String(score);
+    }
+    axios.put(`${env.apiEndPoint}/players/${id}`, data)
+      .then(() => { })
+      .catch(err => console.error(err))
+  }
+
+  handleCloseDialog() {
+    this.setState({
+      dialogOpen: false
+    })
   }
 
   backToQuiz() {
@@ -242,8 +316,28 @@ class QuizComponent extends React.Component {
             onClick={this.allComplete}>Complete</button>
         }
         {(this.state.mode !== "test" && this.state.showAnswer) &&
-          <Link to="/content">Back to content</Link>
+          <Link onClick={() => this.backToQuiz()} to="/content">Back to content</Link>
         }
+        {(this.state.mode === "test") &&
+          <Link onClick={() => this.backToQuiz()} to="/content">Back to content</Link>
+        }
+        <Dialog
+          open={this.state.dialogOpen}
+          onClose={this.handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {this.state.scoreText}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCloseDialog} color="primary" autoFocus>
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     )
   }

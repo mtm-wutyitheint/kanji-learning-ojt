@@ -31,7 +31,6 @@ class Login extends Component {
         name: this.state.name,
         password: this.state.password,
       }).then(response => {
-        console.log(response);
         if (response.status === 200) {
           this.setState({ success: true });
           localStorage.setItem('loginUser', JSON.stringify(response.data));

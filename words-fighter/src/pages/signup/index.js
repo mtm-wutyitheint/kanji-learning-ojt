@@ -67,7 +67,7 @@ class Signup extends Component {
           this.setState({ isExit: false })
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }
 
   render() {
