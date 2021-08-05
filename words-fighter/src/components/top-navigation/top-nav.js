@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -8,18 +7,10 @@ import Menu from '@material-ui/core/Menu';
 import { Link, useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
-
-const useStyles = makeStyles(() => ({
-  root: {
-    flexGrow: 1,
-  },
-  title: {
-    flexGrow: 1
-  }
-}));
+import './top-nav.scss';
+import kanji from '../../img/kanji.png';
 
 export default function TopNav() {
-  const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -60,13 +51,13 @@ export default function TopNav() {
   }
 
   return (
-    <div className={classes.root}>
+    <div className="root">
       {auth && (
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6" className={classes.title}>
-              <Link to="/top" style={{ textDecoration: 'none', color: 'inherit' }}>
-                Top page
+            <Typography variant="h6" className="title">
+              <Link to="/top">
+                <img className="top-image" src={kanji} alt={'top'}></img>
               </Link>
             </Typography>
             <div>

@@ -21,7 +21,7 @@ class ScoreResult extends React.Component {
     return (
       <div className="exam-result">
         {(this.state.data.length > 0 && this.state.mode === "exam") &&
-          <table>
+          <table className="exam-table">
             <thead>
               <tr>
                 <th>No</th>
@@ -46,7 +46,7 @@ class ScoreResult extends React.Component {
         }
 
         {(this.state.data.length > 0 && this.state.mode === "practise") &&
-          <table>
+          <table className="practise-table">
             <thead>
               <tr>
                 <th>No</th>
@@ -68,7 +68,7 @@ class ScoreResult extends React.Component {
                     <td>{result.kind}</td>
                     <td>
                       {result.chapters.length > 0 &&
-                        <select>
+                        <select className="chapter-select-box">
                           {result.chapters.map((r, i) => {
                             return (
                               <option key={i} value={r}>{r}</option>
