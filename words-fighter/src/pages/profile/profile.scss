@@ -25,7 +25,7 @@
         display: block;
         margin: 5vh auto;
         padding: 4px;
-        width: 10vw;
+        width: 5vw;
         .camera {
           font-size: 22px;
         }
@@ -59,7 +59,7 @@
         .btn-save {
           float: right;
           width: 30%;
-          height: 8vh;
+          height: 40px;
           background-color: #8dbcf4;
           border: 0;
           border-radius: 1vw;
@@ -72,15 +72,69 @@
   .record {
     width: 100%;
     display: block;
-    background-color: #fff;
     padding: 10px;
-    margin: 40px 0;
+    margin: 0;
     .record-container {
-      margin: 20px 10px;
+      margin: 0 10px 40px 10px;
       .record-sub-container {
         display: block;
         width: 100%;
       }
+    }
+  }
+
+  
+  @media only screen and (max-width: 1024px) and (min-width: 768px) {
+    .profile-container {
+      .user-image {
+        .img-change-btn {
+          width: 12vw;
+        }
+      }
+      .user-profile-info {
+        .form-btn {
+          .btn-save {
+            width: 40%;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 767px) and (min-width: 300px) {
+    width: 100%;
+    .profile-container {
+      display: block;
+      margin-top: 30px;
+      .user-image {
+        .profile-image {
+          margin: 0 auto;
+        }
+        .img-change-btn {
+          margin: 10px auto;
+          padding: 2px;
+          width: 13vw;
+        }
+      }
+      .user-profile-info {
+        padding: 0;
+        .form-label {
+          width: 50vw;
+        }
+        .form-field {
+          width: 50vw;
+        }
+        .form-btn {
+          width: 53vw;
+          margin: 0 auto;
+          .btn-save {
+            float: none;
+          }
+        }
+      }
+    }
+    .record {
+      padding: 0;
     }
   }
 }
