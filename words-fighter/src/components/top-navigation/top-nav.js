@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import './top-nav.scss';
 import kanji from '../../img/kanji.png';
-import { env } from '../../env/development';
 
 export default function TopNav() {
   const [auth, setAuth] = React.useState(true);
@@ -31,9 +30,6 @@ export default function TopNav() {
   React.useEffect(() => {
     currentLoginUser();
   })
-
-  let profilePic = JSON.parse(localStorage.getItem('loginUser'));
-  profilePic = (profilePic) ? env.apiEndPoint + profilePic.image.url : null;
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);

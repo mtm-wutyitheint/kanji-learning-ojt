@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import kanjiPic from '../../img/kanji.png';
 import './kanji-detail-dialog.scss';
-import _ from 'lodash';
+import _, { isNil } from 'lodash';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -19,7 +19,7 @@ export default function KanjiDetail(props) {
   const { open, close, data, index } = props;
 
   const setCurrent = () => {
-    if (currentIndex) {
+    if (!isNil(currentIndex)) {
       setCurrentIndex(currentIndex);
     } else if (data && data.length > 0) {
       const current = _.findIndex(data, { id: index });
@@ -37,7 +37,7 @@ export default function KanjiDetail(props) {
   const handlePrevious = () => {
     const previousIndex = currentIndex - 1;
     if (previousIndex >= 0 && previousIndex < data.length) {
-      setCurrentIndex(currentIndex - 1);
+      setCurrentIndex(previousIndex);
       setKanjiItem(data[currentIndex]);
     }
   }
@@ -45,7 +45,7 @@ export default function KanjiDetail(props) {
   const handleNext = () => {
     const nextIndex = currentIndex + 1;
     if (nextIndex >= 0 && nextIndex < data.length) {
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex(nextIndex);
       setKanjiItem(data[currentIndex]);
     }
   }
