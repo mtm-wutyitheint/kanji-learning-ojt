@@ -20,6 +20,11 @@
       cursor: pointer;
     }
   }
+  .chapter {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+  }
   .clearFix:after {
     content: "";
     display: block;
@@ -79,59 +84,63 @@
   }
 }
 
-.pagination  {
+.pagination {
   width: 60%;
+  display: flex;
   margin: 40px auto;
   padding: 0;
   padding-bottom: 40px;
   list-style: none;
   outline: none;
-  
-   .active {
-      a, span, a:hover, span:hover, a:focus, span:focus{
-        background-color: #E91E63  ;
-        border-color: #E91E63 ;
-        outline: none ;
-      }
-   }
-   .disabled{
-    pointer-events:none; //This makes it not clickable
-    opacity:0.6;  
-   }
-   li {
-     margin: 15px auto;
-      a{
-        border: 1px solid #EB9FA1   ;
-        padding: 5px 10px;
-        outline: none;
-        list-style: none;
-        cursor: pointer;
-      }
-      span {
-        color: #E91E63 
-      }
-   } 
-   .next{
-     float: left;
-   }
-   .next2{
-     float: right;
-   }
+
+  .active {
+    a,
+    span,
+    a:hover,
+    span:hover,
+    a:focus,
+    span:focus {
+      background-color: #e91e63;
+      border-color: #e91e63;
+      outline: none;
+    }
+  }
+  .disabled {
+    pointer-events: none; //This makes it not clickable
+    opacity: 0.6;
+  }
+  li {
+    margin: 15px auto;
+    a {
+      border: 1px solid #eb9fa1;
+      margin: 0 2px;
+      padding: 5px 10px;
+      outline: none;
+      list-style: none;
+      cursor: pointer;
+    }
+    span {
+      color: #e91e63;
+    }
+  }
+  .list {
+    display: flex;
+  }
 }
 
 @media only screen and (max-width: 1024px) {
-    .pagination{
-      width: 50%;
-      margin: 0 auto;
-    .hole{
-     visibility: hidden;
-     width: 0;
-    }
-  }  
- }
+  // .pagination {
+  //   width: 50%;
+  //   margin: 0 auto;
+  //   .hole {
+  //     visibility: hidden;
+  //     width: 0;
+  //   }
+  // }
+}
 
- @media only screen and (max-width: 762px) {
-   .learn{
+@media only screen and (max-width: 768px) {
+  .learn {
     .header {
       font-size: 1.5em;
     }
@@ -143,7 +152,7 @@
       padding: 1px 0 3px 2px;
       font-size: 11px;
     }
-    .block{
+    .block {
       width: 35%;
       height: 6em;
       margin: 8px 13.5%;
@@ -172,24 +181,24 @@
         width: 0;
         margin-right: 0;
       }
-     }
-    .block:nth-child( odd ) {
+    }
+    .block:nth-child(odd) {
       margin-right: 1.5%;
     }
-    .block:nth-child( even ) {
+    .block:nth-child(even) {
       margin-left: 1.5%;
     }
-    .pagination{
-      width: 74%;
+    .pagination {
+      width: 100%;
       margin: 0 auto;
       padding: 0;
-      li{
+      li {
         margin: 10px 5px;
       }
-      a{
-      font-size: 12px;
-      padding: 5px;
+      a {
+        font-size: 12px;
+        padding: 2px;
       }
-   }
-  }  
+    }
+  }
 }

@@ -44,6 +44,7 @@ class Pagination extends React.Component {
 
     // get new pager object for specified page
     pager = this.getPager(data.length, page, pageSize);
+    console.log(pager)
 
     // get new page of data from data array
     var pageOfItems = data.slice(pager.startIndex, pager.endIndex + 1);
@@ -52,7 +53,7 @@ class Pagination extends React.Component {
     this.setState({ pager: pager });
 
     // call change page function in parent component
-    this.props.onChangePage(pageOfItems);
+    this.props.onChangePage(pageOfItems, pager.currentPage);
   }
 
   getPager(totalItems, currentPage, pageSize) {
@@ -60,26 +61,26 @@ class Pagination extends React.Component {
     currentPage = currentPage || 1;
 
     // default page size is 10
-    pageSize = pageSize || 10;
+    pageSize = pageSize || 5;
 
     // calculate total pages
     var totalPages = Math.ceil(totalItems / pageSize);
     var startPage, endPage;
-    if (totalPages <= 10) {
+    if (totalPages <= 5) {
       // less than 10 total pages so show all
       startPage = 1;
       endPage = totalPages;
     } else {
       // more than 10 total pages so calculate start and end pages
-      if (currentPage <= 6) {
+      if (currentPage <= 3) {
         startPage = 1;
-        endPage = 10;
-      } else if (currentPage + 4 >= totalPages) {
-        startPage = totalPages - 9;
+        endPage = 5;
+      } else if (currentPage + 2 >= totalPages) {
+        startPage = totalPages - 4;
         endPage = totalPages;
       } else {
-        startPage = currentPage - 5;
-        endPage = currentPage + 4;
+        startPage = currentPage - 2;
+        endPage = currentPage + 2;
       }
     }
 
@@ -113,29 +114,29 @@ class Pagination extends React.Component {
     }
 
     return (
-      // <div className="pagi-wrap">
-      <ul className="pagination">
-        {/* <li className={pager.currentPage === 1 ? 'disabled hole' : 'hole'}>
-          <a onClick={() => this.setPage(1)}>First</a>
-        </li> */}
-        <li className={pager.currentPage === 1 ? 'disabled next' : 'next'}>
-          <a onClick={() => this.setPage(pager.currentPage - 1)}>Previous Chapter</a>
-        </li>
-        {/* <div className="list"> */}
-        {/* {pager.pages.map((page, index) =>
-          <li key={index} className={pager.currentPage === page ? 'active' : ''}>
-            <a onClick={() => this.setPage(page)}>{page}</a>
+      <div className="pagi-wrap">
+        <ul className="pagination">
+          <li className={pager.currentPage === 1 ? 'disabled hole' : 'hole'}>
+            <a onClick={() => this.setPage(1)}>First</a>
           </li>
-        )} */}
-        {/* </div> */}
-        <li disable="" className={pager.currentPage === pager.totalPages ? 'disabled next2' : 'next2'}>
-          <a  onClick={() => this.setPage(pager.currentPage + 1)}>Next Chapter</a>
-        </li>
-        {/* <li className={pager.currentPage === pager.totalPages ? 'disabled hole' : 'hole'}>
-          <a onClick={() => this.setPage(pager.totalPages)}>Last</a>
-        </li> */}
-      </ul>
-      // </div>
+          <li className={pager.currentPage === 1 ? 'disabled next' : 'next'}>
+            <a onClick={() => this.setPage(pager.currentPage - 1)}>Previous Chapter</a>
+          </li>
+          <div className="list">
+            {pager.pages.map((page, index) =>
+              <li key={index} className={pager.currentPage === page ? 'active' : ''}>
+                <a onClick={() => this.setPage(page)}>{page}</a>
+              </li>
+            )}
+          </div>
+          <li disable="" className={pager.currentPage === pager.totalPages ? 'disabled next2' : 'next2'}>
+            <a onClick={() => this.setPage(pager.currentPage + 1)}>Next Chapter</a>
+          </li>
+          <li className={pager.currentPage === pager.totalPages ? 'disabled hole' : 'hole'}>
+            <a onClick={() => this.setPage(pager.totalPages)}>Last</a>
+          </li>
+        </ul>
+      </div>
     );
   }
 }
