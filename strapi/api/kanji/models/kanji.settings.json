@@ -14,11 +14,11 @@
   "attributes": {
     "kanji": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "meaning": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "onyomi": {
       "type": "string",
@@ -72,7 +72,7 @@
     },
     "level": {
       "type": "string",
-      "required": true
+      "required": false
     }
   }
 }
