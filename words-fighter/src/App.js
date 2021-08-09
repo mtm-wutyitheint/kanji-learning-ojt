@@ -15,6 +15,7 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile/profile";
 import Top from './pages/top/top';
 import TopNav from "./components/top-navigation/top-nav";
+import ScoreDetail from "./pages/score-detail/score-detail";
 
 function App() {
   const LoginContainer = () => (
@@ -35,6 +36,7 @@ function App() {
         <GuardedRoute path="/learn" component={Learn} />
         <GuardedRoute path="/quiz" component={Quiz} />
         <GuardedRoute path="/profile" component={Profile} />
+        <GuardedRoute path="/score-detail" component={ScoreDetail}></GuardedRoute>
       </div>
     </div>
   )

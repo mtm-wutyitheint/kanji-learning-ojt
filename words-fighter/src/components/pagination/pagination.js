@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
+import './pagination.scss';
 
 const propTypes = {
   data: PropTypes.array.isRequired,
@@ -44,7 +45,6 @@ class Pagination extends React.Component {
 
     // get new pager object for specified page
     pager = this.getPager(data.length, page, pageSize);
-    console.log(pager)
 
     // get new page of data from data array
     var pageOfItems = data.slice(pager.startIndex, pager.endIndex + 1);

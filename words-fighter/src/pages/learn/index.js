@@ -3,7 +3,7 @@ import kanjiPic from '../../img/kanji.png';
 import "./learn.scss";
 import KanjiDetail from '../../components/kanji-detail';
 import { withRouter } from 'react-router-dom';
-import Pagination from "./Pagination";
+import Pagination from "../../components/pagination/pagination";
 import axios from 'axios';
 import { env } from '../../env/development';
 

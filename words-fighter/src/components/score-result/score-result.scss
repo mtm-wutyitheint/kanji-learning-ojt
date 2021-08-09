@@ -25,6 +25,21 @@
     }
   }
 
+  .show-more-link {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    .show-more-btn {
+      font-size: 14px;
+      padding: 10px 20px;
+      margin: 14px auto;
+      border: 0;
+      background-color: #ea736a;
+      border-radius: 17px;
+    }
+  }
+
   @media only screen and (max-width: 1024px) and (min-width: 768px) {
     table {
       td,

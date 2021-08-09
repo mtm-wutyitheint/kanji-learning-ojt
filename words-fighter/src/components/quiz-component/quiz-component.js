@@ -184,7 +184,6 @@ class QuizComponent extends React.Component {
   }
 
   backToQuiz() {
-    console.log('back to quiz');
     this.setState({
       mode: '',
       data: [],

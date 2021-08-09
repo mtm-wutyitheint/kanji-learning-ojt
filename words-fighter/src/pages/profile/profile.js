@@ -34,41 +34,43 @@ class Profile extends React.Component {
     let practiseN5 = [];
     let practiseN4 = [];
     const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-    axios.get(env.apiEndPoint + '/players/' + loginUser.id)
-      .then(response => {
-        const player = response.data;
-        this.setState({
-          id: player.id,
-          name: player.name,
-          n5Score: player.current_n5_score,
-          n4Score: player.current_n4_score,
-          examRecord: player.exam_scores,
-          practiseRecord: player.practise_scores,
-          image: player.profile ?
-            env.apiEndPoint + player.profile.url :
-            playerProfile
+    if (loginUser && loginUser.id) {
+      axios.get(env.apiEndPoint + '/players/' + loginUser.id)
+        .then(response => {
+          const player = response.data;
+          this.setState({
+            id: player.id,
+            name: player.name,
+            n5Score: player.current_n5_score,
+            n4Score: player.current_n4_score,
+            examRecord: player.exam_scores,
+            practiseRecord: player.practise_scores,
+            image: player.profile ?
+              env.apiEndPoint + player.profile.url :
+              playerProfile
+          })
+          if (this.state.examRecord && this.state.examRecord.length > 0) {
+            examN5 = this.state.examRecord.filter(e => e.level === 'N5');
+            examN5 = this.sortedByDate(examN5);
+            examN4 = this.state.examRecord.filter(e => e.level === 'N4');
+            examN4 = this.sortedByDate(examN4);
+          }
+          if (this.state.practiseRecord && this.state.practiseRecord.length > 0) {
+            practiseN5 = this.state.practiseRecord.filter(e => e.level === 'N5');
+            practiseN5 = this.chapterToList(practiseN5);
+            practiseN5 = this.sortedByDate(practiseN5);
+            practiseN4 = this.state.practiseRecord.filter(e => e.level === 'N4');
+            practiseN4 = this.chapterToList(practiseN4);
+            practiseN4 = this.sortedByDate(practiseN4);
+          }
+          this.setState({
+            examRecordN5: examN5,
+            examRecordN4: examN4,
+            practiseRecordN5: practiseN5,
+            practiseRecordN4: practiseN4,
+          })
         })
-        if (this.state.examRecord && this.state.examRecord.length > 0) {
-          examN5 = this.state.examRecord.filter(e => e.level === 'N5');
-          examN5 = this.sortedByDate(examN5);
-          examN4 = this.state.examRecord.filter(e => e.level === 'N4');
-          examN4 = this.sortedByDate(examN4);
-        }
-        if (this.state.practiseRecord && this.state.practiseRecord.length > 0) {
-          practiseN5 = this.state.practiseRecord.filter(e => e.level === 'N5');
-          practiseN5 = this.chapterToList(practiseN5);
-          practiseN5 = this.sortedByDate(practiseN5);
-          practiseN4 = this.state.practiseRecord.filter(e => e.level === 'N4');
-          practiseN4 = this.chapterToList(practiseN4);
-          practiseN4 = this.sortedByDate(practiseN4);
-        }
-        this.setState({
-          examRecordN5: examN5,
-          examRecordN4: examN4,
-          practiseRecordN5: practiseN5,
-          practiseRecordN4: practiseN4,
-        })
-      })
+    }
   }
   sortedByDate(items = []) {
     const data = items.sort((a, b) => {
@@ -221,7 +223,7 @@ class Profile extends React.Component {
             {this.state.examRecordN5.length > 0 &&
               <div className="record-sub-container">
                 <h2>Exam result of N5</h2>
-                <ScoreResult mode="exam" data={this.state.examRecordN5}></ScoreResult>
+                <ScoreResult level="N5" mode="exam" data={this.state.examRecordN5}></ScoreResult>
               </div>
             }
           </div>
@@ -229,7 +231,7 @@ class Profile extends React.Component {
             {this.state.examRecordN4.length > 0 &&
               <div className="record-sub-container">
                 <h2>Exam result of N4</h2>
-                <ScoreResult mode="exam" data={this.state.examRecordN4}></ScoreResult>
+                <ScoreResult level="N4" mode="exam" data={this.state.examRecordN4}></ScoreResult>
               </div>
             }
           </div>
@@ -237,7 +239,7 @@ class Profile extends React.Component {
             {this.state.practiseRecordN5.length > 0 &&
               <div className="record-sub-container">
                 <h2>Practise result of N5</h2>
-                <ScoreResult mode="practise" data={this.state.practiseRecordN5}></ScoreResult>
+                <ScoreResult level="N5" mode="practise" data={this.state.practiseRecordN5}></ScoreResult>
               </div>
             }
           </div>
@@ -245,7 +247,7 @@ class Profile extends React.Component {
             {this.state.practiseRecordN4.length > 0 &&
               <div className="record-sub-container">
                 <h2>Practise result of N4</h2>
-                <ScoreResult mode="practise" data={this.state.practiseRecordN4}></ScoreResult>
+                <ScoreResult level="N4" mode="practise" data={this.state.practiseRecordN4}></ScoreResult>
               </div>
             }
           </div>
