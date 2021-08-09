@@ -184,12 +184,14 @@ class QuizComponent extends React.Component {
   }
 
   backToQuiz() {
+    console.log('back to quiz');
     this.setState({
       mode: '',
       data: [],
       showAnswer: false,
       listAnswer: []
     });
+
   }
 
   render() {
@@ -316,10 +318,14 @@ class QuizComponent extends React.Component {
             onClick={this.allComplete}>Complete</button>
         }
         {(this.state.mode !== "test" && this.state.showAnswer) &&
-          <Link onClick={() => this.backToQuiz()} to="/content">Back to content</Link>
+          <Link className="no-link" to="/content">
+            <button className="complete-btn" onClick={() => this.backToQuiz()}>Back to content</button>
+          </Link>
         }
         {(this.state.mode === "test") &&
-          <Link onClick={() => this.backToQuiz()} to="/content">Back to content</Link>
+          <Link className="no-link" to="/content">
+            <button className="complete-btn" onClick={() => this.backToQuiz()}>Back to content</button>
+          </Link>
         }
         <Dialog
           open={this.state.dialogOpen}

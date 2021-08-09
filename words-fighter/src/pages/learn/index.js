@@ -10,7 +10,8 @@ import { env } from '../../env/development';
 const defaultProps = {
   data: [],
   pageOfItems: [],
-  level: ''
+  level: '',
+  currentChapter: 1
 }
 
 class Learn extends React.Component {
@@ -21,7 +22,8 @@ class Learn extends React.Component {
       selectedIndex: null,
       data: [],
       pageOfItems: [],
-      inputvalue: ''
+      inputvalue: '',
+      currentChapter: 1
     }
     defaultProps.level = localStorage.getItem('level')
     this.kind = defaultProps.level;
@@ -60,9 +62,10 @@ class Learn extends React.Component {
       this.setState({ pageOfItems: defaultProps.pageOfItems, data: defaultProps.data })
     }
   }
-  onChangePage(pageOfItems) {
-    this.setState({ pageOfItems: pageOfItems })
+  onChangePage(pageOfItems, currentChapter) {
+    this.setState({ pageOfItems: pageOfItems, currentChapter: currentChapter })
     defaultProps.pageOfItems = pageOfItems;
+    defaultProps.currentChapter = currentChapter;
   }
   render() {
     return (
@@ -76,16 +79,17 @@ class Learn extends React.Component {
             onChange={this.search}
           ></input>
         </div>
-        <div className="container">
+        <h2 className="chapter">Chapter {this.state.currentChapter}</h2>
+        <div className="container clearFix">
           {this.state.pageOfItems.map((words) => {
             return (
               <div
                 onClick={() => this.openDialog(words.id)}
                 key={words.id}
                 className="block clearFix">
-                <p className="mean">
+                <div className="mean">
                   <span className="kanji">{words.kanji}</span>
-                  ({words.kunRomaji}) = {words.meaning}</p>
+                  ({words.kunRomaji}) = {words.meaning}</div>
                 <img className="logo" src={kanjiPic} alt="kanji logo"></img>
               </div>
             )

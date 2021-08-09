@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { env } from '../../env/development';
+import halfBg from '../../img/aa.png';
+
 
 class Signup extends Component {
   constructor(props) {
@@ -76,8 +78,11 @@ class Signup extends Component {
 
     return (
       <div className="signup">
-        <div className="content-logo">
-          <div className="content-log2"></div>
+        <div className="img-bg clearFix">
+          <p className="upper">A new Language is a New Life 
+          <span className="under_text">新しい言語は新しい人生の始まり</span>
+          </p>
+          <img className="img" alt="decorate" src={halfBg}></img>
         </div>
         <form onSubmit={this.singup} className="form">
           <div className="name-wrap">

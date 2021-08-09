@@ -14,8 +14,8 @@ const options = {
   answerWithPictures: 'answerWithPictures'
 }
 module.exports = {
-  isDuplicated: async (word) => {
-    return await strapi.services.kanji.count({ kanji: word }) > 0;
+  isDuplicated: async (word, level) => {
+    return await strapi.services.kanji.count({ kanji: word, level }) > 0;
   },
 
   getRandom: (arr, n) => {

@@ -16,7 +16,7 @@ module.exports = {
       await Promise.all(words.map(async (word) => {
         let isDuplicated = false;
         let messages = 'duplicate words : ';
-        if (await strapi.services.kanji.isDuplicated(word.kanji)) {
+        if (await strapi.services.kanji.isDuplicated(word.kanji, word.level)) {
           isDuplicated = true;
           messages = messages + `${word.kanji}`;
         }
