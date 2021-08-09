@@ -23,6 +23,7 @@ class Login extends Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.singup = this.singup.bind(this);
+    this.loginInAsGuest = this.loginInAsGuest.bind(this);
   }
   singup(event) {
     this.setState({ open: true });
@@ -51,14 +52,18 @@ class Login extends Component {
   handleClose = () => {
     this.setState({ open: false, name: '', password: '' })
   };
+  loginInAsGuest() {
+    this.setState({ success: true });
+    localStorage.setItem('loginUser', JSON.stringify({ id: 'guest' }));
+  }
   render() {
     let alertTitle = this.state.success === true ? 'Login Sucess!' : 'Login Failed! Please Try again...';
     let route = this.state.success === true ? '/top' : '/login';
     return (
       <div className="signup">
         <div className="img-bg clearFix">
-          <p className="upper">A new Language is a New Life 
-          <span className="under_text">新しい言語は新しい人生の始まり</span>
+          <p className="upper">A new Language is a New Life
+            <span className="under_text">新しい言語は新しい人生の始まり</span>
           </p>
           <img className="img" src={halfBg} alt="decorate"></img>
         </div>
@@ -70,10 +75,14 @@ class Login extends Component {
             <input className="input" type="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChange}></input>
           </div>
           <button className="text-center" disabled={(this.state.name.length === 0 || this.state.password.length === 0)}>Login</button>
+          <span className="text-center">OR</span>
+          {/* <a href="/top" className="text-center">Login As Guest</a> */}
+          <Link onClick={this.loginInAsGuest} to="/top" className="text-center">
+            <div>Login As Guest</div>
+          </Link>
         </form>
         <Dialog
           open={this.state.open}
-          // onClose={this.state.setOpen}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >

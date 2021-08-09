@@ -97,8 +97,6 @@ class Signup extends Component {
           <button type="submit" className="text-center" disabled={(this.state.name.length === 0 || this.state.password.length === 0 ||
             this.state.isExit || !this.state.isNameValid || !this.state.isPassValid)}>Sing Up</button>
           <a href="/login" className="text-center">Already an Account? Login in</a>
-          <span className="text-center">OR</span>
-          <a href="/top" className="text-center">Login As Guest</a>
         </form>
         <Dialog
           open={this.state.open}
