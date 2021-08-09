@@ -22,7 +22,8 @@ class Profile extends React.Component {
       examRecordN5: [],
       examRecordN4: [],
       practiseRecordN5: [],
-      practiseRecordN4: []
+      practiseRecordN4: [],
+      isGuest: true
     };
     this.fileChooser = React.createRef();
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,7 +35,8 @@ class Profile extends React.Component {
     let practiseN5 = [];
     let practiseN4 = [];
     const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-    if (loginUser && loginUser.id) {
+    if (loginUser && loginUser.id && loginUser.id !== 'guest') {
+      this.setState({ isGuest: false });
       axios.get(env.apiEndPoint + '/players/' + loginUser.id)
         .then(response => {
           const player = response.data;
@@ -113,25 +115,27 @@ class Profile extends React.Component {
   }
 
   updateProfile(data, id) {
-    axios.put(env.apiEndPoint + '/players/' + id, data)
-      .then(() => {
-        this.setState({
-          id: 0,
-          name: '',
-          password: '',
-          n5Score: 0,
-          n4Score: 0,
-          image: {},
-          profilePicture: {},
-          examRecord: [],
-          practiseRecord: [],
-          examRecordN5: [],
-          examRecordN4: [],
-          practiseRecordN5: [],
-          practiseRecordN4: []
+    if (!this.state.isGuest) {
+      axios.put(env.apiEndPoint + '/players/' + id, data)
+        .then(() => {
+          this.setState({
+            id: 0,
+            name: '',
+            password: '',
+            n5Score: 0,
+            n4Score: 0,
+            image: {},
+            profilePicture: {},
+            examRecord: [],
+            practiseRecord: [],
+            examRecordN5: [],
+            examRecordN4: [],
+            practiseRecordN5: [],
+            practiseRecordN4: []
+          })
         })
-      })
-      .catch(err => console.error(err))
+        .catch(err => console.error(err))
+    }
   }
 
   handleSubmit(event) {
@@ -158,101 +162,106 @@ class Profile extends React.Component {
   }
   render() {
     return (
-      <div className="profile">
-        <div className="profile-container">
-          <div className="user-image">
-            <div className="profile-image">
-              <div className="image"
-                style={{
-                  backgroundImage: `url(${this.state.image})`
-                }}></div>
-            </div>
-            <button
-              className="img-change-btn"
-              onClick={() => this.fileChooser.click()}>
-              <i className="fa fa-camera camera"></i>
-            </button>
-          </div>
-          <input
-            type="file"
-            ref={(ref) => this.fileChooser = ref}
-            className="file-chooser"
-            accept="image/*"
-            onChange={(e) => this.fileImageChange(e.target.files)}></input>
-          <div className="user-profile-info">
-            <form onSubmit={this.handleSubmit}>
-              <label className="form-label">Name</label>
-              <input
-                type="text"
-                name="name"
-                className="form-field"
-                value={this.state.name}
-                onChange={this.handleOnChange}></input>
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                name="password"
-                className="form-field"
-                value={this.state.password}
-                onChange={this.handleOnChange}></input>
-
-              <label className="form-label">Current N5 Score</label>
-              <input
-                type="text"
-                name="n5"
-                className="form-field"
-                value={this.state.n5Score}
-                disabled></input>
-              <label className="form-label">Current N4 Score</label>
-              <input
-                type="text"
-                name="n4"
-                className="form-field"
-                value={this.state.n4Score}
-                disabled></input>
-              <div className="form-btn">
+      <>
+        {!this.state.isGuest ?
+          (<div className="profile">
+            <div className="profile-container">
+              <div className="user-image">
+                <div className="profile-image">
+                  <div className="image"
+                    style={{
+                      backgroundImage: `url(${this.state.image})`
+                    }}></div>
+                </div>
                 <button
-                  type="submit"
-                  className="btn-save">save</button>
+                  className="img-change-btn"
+                  onClick={() => this.fileChooser.click()}>
+                  <i className="fa fa-camera camera"></i>
+                </button>
               </div>
-            </form>
-          </div>
-        </div>
-        <div className='record'>
-          <div className="record-container">
-            {this.state.examRecordN5.length > 0 &&
-              <div className="record-sub-container">
-                <h2>Exam result of N5</h2>
-                <ScoreResult level="N5" mode="exam" data={this.state.examRecordN5}></ScoreResult>
+              <input
+                type="file"
+                ref={(ref) => this.fileChooser = ref}
+                className="file-chooser"
+                accept="image/*"
+                onChange={(e) => this.fileImageChange(e.target.files)}></input>
+              <div className="user-profile-info">
+                <form onSubmit={this.handleSubmit}>
+                  <label className="form-label">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-field"
+                    value={this.state.name}
+                    onChange={this.handleOnChange}></input>
+                  <label className="form-label">Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    className="form-field"
+                    value={this.state.password}
+                    onChange={this.handleOnChange}></input>
+
+                  <label className="form-label">Current N5 Score</label>
+                  <input
+                    type="text"
+                    name="n5"
+                    className="form-field"
+                    value={this.state.n5Score}
+                    disabled></input>
+                  <label className="form-label">Current N4 Score</label>
+                  <input
+                    type="text"
+                    name="n4"
+                    className="form-field"
+                    value={this.state.n4Score}
+                    disabled></input>
+                  <div className="form-btn">
+                    <button
+                      type="submit"
+                      className="btn-save">save</button>
+                  </div>
+                </form>
               </div>
-            }
-          </div>
-          <div className="record-container">
-            {this.state.examRecordN4.length > 0 &&
-              <div className="record-sub-container">
-                <h2>Exam result of N4</h2>
-                <ScoreResult level="N4" mode="exam" data={this.state.examRecordN4}></ScoreResult>
+            </div>
+            <div className='record'>
+              <div className="record-container">
+                {this.state.examRecordN5.length > 0 &&
+                  <div className="record-sub-container">
+                    <h2>Exam result of N5</h2>
+                    <ScoreResult level="N5" mode="exam" data={this.state.examRecordN5}></ScoreResult>
+                  </div>
+                }
               </div>
-            }
-          </div>
-          <div className="record-container">
-            {this.state.practiseRecordN5.length > 0 &&
-              <div className="record-sub-container">
-                <h2>Practise result of N5</h2>
-                <ScoreResult level="N5" mode="practise" data={this.state.practiseRecordN5}></ScoreResult>
+              <div className="record-container">
+                {this.state.examRecordN4.length > 0 &&
+                  <div className="record-sub-container">
+                    <h2>Exam result of N4</h2>
+                    <ScoreResult level="N4" mode="exam" data={this.state.examRecordN4}></ScoreResult>
+                  </div>
+                }
               </div>
-            }
-          </div>
-          <div className="record-container">
-            {this.state.practiseRecordN4.length > 0 &&
-              <div className="record-sub-container">
-                <h2>Practise result of N4</h2>
-                <ScoreResult level="N4" mode="practise" data={this.state.practiseRecordN4}></ScoreResult>
+              <div className="record-container">
+                {this.state.practiseRecordN5.length > 0 &&
+                  <div className="record-sub-container">
+                    <h2>Practise result of N5</h2>
+                    <ScoreResult level="N5" mode="practise" data={this.state.practiseRecordN5}></ScoreResult>
+                  </div>
+                }
               </div>
-            }
-          </div>
-        </div>
-      </div>
+              <div className="record-container">
+                {this.state.practiseRecordN4.length > 0 &&
+                  <div className="record-sub-container">
+                    <h2>Practise result of N4</h2>
+                    <ScoreResult level="N4" mode="practise" data={this.state.practiseRecordN4}></ScoreResult>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>) :
+          (<p>Guest doesn't have profile</p>)
+        }
+      </>
     )
   }
 }

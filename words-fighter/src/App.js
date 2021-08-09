@@ -16,12 +16,14 @@ import Profile from "./pages/profile/profile";
 import Top from './pages/top/top';
 import TopNav from "./components/top-navigation/top-nav";
 import ScoreDetail from "./pages/score-detail/score-detail";
+import ForgetPassword from "./pages/forget-password/forget-password";
 
 function App() {
   const LoginContainer = () => (
     <div className="container">
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
+      <Route path="/forget-password" component={ForgetPassword}></Route>
       <Route exact path="/" render={() => <Redirect to="/top" />} />
     </div>
   )

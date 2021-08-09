@@ -52,48 +52,48 @@ export default function TopNav() {
 
   return (
     <div className="root">
-      {auth && (
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" className="title">
-              <Link to="/top">
-                <img className="top-image" src={kanji} alt={'top'}></img>
-              </Link>
-            </Typography>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" className="title">
+            <Link to="/top">
+              <img className="top-image" src={kanji} alt={'top'}></img>
+            </Link>
+          </Typography>
+          <div>
             <div>
-              <div>
-                <IconButton
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={handleClose}
-                >
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                {auth &&
                   <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                </Menu>
-              </div>
+                }
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
             </div>
-          </Toolbar>
-        </AppBar>
-      )}
+          </div>
+        </Toolbar>
+      </AppBar>
     </div>
   );
 }

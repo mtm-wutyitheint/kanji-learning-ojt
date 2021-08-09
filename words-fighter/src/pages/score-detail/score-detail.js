@@ -26,7 +26,7 @@ export default function ScoreDetail(props) {
   }
 
   const getPlayerRecord = () => {
-    if (!_.isNil(routeParas.level) && !_.isNil(routeParas.mode) && !_.isNil(routeParas.playerId)) {
+    if (!_.isNil(routeParas) && !_.isNil(routeParas.level) && !_.isNil(routeParas.mode) && !_.isNil(routeParas.playerId)) {
       const apiMode = routeParas.mode === 'exam' ? '/exam-scores' : '/practise-scores';
       const apiPara = {
         level: routeParas.level,
@@ -53,80 +53,82 @@ export default function ScoreDetail(props) {
 
   return (
     <>
-      <div className="score-result-detail">
-        <h1>{'Score Result of ' + routeParas.mode + ' ' + routeParas.level}</h1>
-        {routeParas.mode === 'exam' ?
-          (
-            <table>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Score</th>
-                  <th>Total</th>
-                  <th>Answer Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {showItems.map((r, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>{r.id}</td>
-                      <td>{r.score}</td>
-                      <td>{r.total}</td>
-                      <td>{r.answer_date}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          ) :
-          (
-            <table>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Score</th>
-                  <th>Total</th>
-                  <th>Kind</th>
-                  <th>Chapters</th>
-                  <th>Random Words</th>
-                  <th>Answer Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {showItems.map((r, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>{r.id}</td>
-                      <td>{r.score}</td>
-                      <td>{r.total}</td>
-                      <td>{r.kind}</td>
-                      <td>
-                        {r.chapters && r.chapters.length > 0 &&
-                          <select className="chapter-select-box">
-                            {r.chapters.map((re, index) => {
-                              return (
-                                <option key={index} value={re}>{re}</option>
-                              )
-                            })}
-                          </select>
-                        }
-                      </td>
-                      <td>{r.random_count}</td>
-                      <td>{r.answer_date}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          )
-        }
+      {(routeParas && routeParas.level && routeParas.mode && routeParas.playerId) &&
+        <div className="score-result-detail">
+          <h1>{'Score Result of ' + routeParas.mode + ' ' + routeParas.level}</h1>
+          {routeParas.mode === 'exam' ?
+            (
+              <table>
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Score</th>
+                    <th>Total</th>
+                    <th>Answer Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {showItems.map((r, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{r.id}</td>
+                        <td>{r.score}</td>
+                        <td>{r.total}</td>
+                        <td>{r.answer_date}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            ) :
+            (
+              <table>
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Score</th>
+                    <th>Total</th>
+                    <th>Kind</th>
+                    <th>Chapters</th>
+                    <th>Random Words</th>
+                    <th>Answer Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {showItems.map((r, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{r.id}</td>
+                        <td>{r.score}</td>
+                        <td>{r.total}</td>
+                        <td>{r.kind}</td>
+                        <td>
+                          {r.chapters && r.chapters.length > 0 &&
+                            <select className="chapter-select-box">
+                              {r.chapters.map((re, index) => {
+                                return (
+                                  <option key={index} value={re}>{re}</option>
+                                )
+                              })}
+                            </select>
+                          }
+                        </td>
+                        <td>{r.random_count}</td>
+                        <td>{r.answer_date}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            )
+          }
 
-        <Pagination
-          data={record}
-          showPage='true'
-          onChangePage={onChangePage} ></Pagination>
-      </div>
+          <Pagination
+            data={record}
+            showPage='true'
+            onChangePage={onChangePage} ></Pagination>
+        </div>
+      }
     </>
   )
 }

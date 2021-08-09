@@ -75,8 +75,8 @@ class Login extends Component {
             <input className="input" type="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChange}></input>
           </div>
           <button className="text-center" disabled={(this.state.name.length === 0 || this.state.password.length === 0)}>Login</button>
+          <Link to="/forget-password" className="text-center">Forget your password?</Link>
           <span className="text-center">OR</span>
-          {/* <a href="/top" className="text-center">Login As Guest</a> */}
           <Link onClick={this.loginInAsGuest} to="/top" className="text-center">
             <div>Login As Guest</div>
           </Link>

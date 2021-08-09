@@ -19,6 +19,7 @@ class Quiz extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isGuest: true,
       showForm: true,
       showQuiz: false,
       totalKanji: 0,
@@ -49,6 +50,10 @@ class Quiz extends React.Component {
 
   componentDidMount() {
     const level = localStorage.getItem('level');
+    const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+    if (loginUser.id === 'guest') {
+      this.setState({ isGuest: true })
+    } else { this.setState({ isGuest: false }) }
     this.setState({
       level
     })
@@ -242,44 +247,46 @@ class Quiz extends React.Component {
           <h1 className="head">Quiz for {this.state.level}</h1>
           {this.state.showForm &&
             <form className="form">
-              <div>
-                <label className="form-label">Mode</label>
-                <label className="form-field"
-                  htmlFor="test">
-                  <input
-                    type="radio"
-                    id="test"
-                    name="mode"
-                    checked={this.state.mode === "test"}
-                    onChange={this.handleChange}
-                    value="test" />
-                  Test
-                </label>
-                <label
-                  className="form-field"
-                  htmlFor="practise">
-                  <input
-                    type="radio"
-                    id="practise"
-                    name="mode"
-                    checked={this.state.mode === "practise"}
-                    onChange={this.handleChange}
-                    value="practise" />
-                  Practise
-                </label>
-                <label
-                  className="form-field"
-                  htmlFor="exam">
-                  <input
-                    type="radio"
-                    id="exam"
-                    name="mode"
-                    checked={this.state.mode === "exam"}
-                    onChange={this.handleChange}
-                    value="exam" />
-                  Exam
-                </label>
-              </div>
+              {!this.state.isGuest &&
+                <div>
+                  <label className="form-label">Mode</label>
+                  <label className="form-field"
+                    htmlFor="test">
+                    <input
+                      type="radio"
+                      id="test"
+                      name="mode"
+                      checked={this.state.mode === "test"}
+                      onChange={this.handleChange}
+                      value="test" />
+                    Test
+                  </label>
+                  <label
+                    className="form-field"
+                    htmlFor="practise">
+                    <input
+                      type="radio"
+                      id="practise"
+                      name="mode"
+                      checked={this.state.mode === "practise"}
+                      onChange={this.handleChange}
+                      value="practise" />
+                    Practise
+                  </label>
+                  <label
+                    className="form-field"
+                    htmlFor="exam">
+                    <input
+                      type="radio"
+                      id="exam"
+                      name="mode"
+                      checked={this.state.mode === "exam"}
+                      onChange={this.handleChange}
+                      value="exam" />
+                    Exam
+                  </label>
+                </div>
+              }
 
               {this.state.mode !== "exam" &&
                 <div>
