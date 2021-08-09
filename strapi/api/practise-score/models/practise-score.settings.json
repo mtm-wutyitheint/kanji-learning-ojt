@@ -48,6 +48,11 @@
     },
     "random_count": {
       "type": "integer"
+    },
+    "user": {
+      "via": "practise_scores",
+      "plugin": "users-permissions",
+      "model": "user"
     }
   }
 }

@@ -128,7 +128,7 @@ class QuizComponent extends React.Component {
     _.forEach(cha_lst, lst => {
       cha_text += lst.label + ',';
     });
-    data.player = user.id;
+    data.user = user.user.id;
     data.score = correct;
     data.total = total;
     data.level = this.state.level;
@@ -146,7 +146,7 @@ class QuizComponent extends React.Component {
     if (this.state.mode === 'exam') {
       const route = '/exam-scores'
       this.saveRecord(data, route);
-      this.updateCurrentScore(user.id, correct, this.state.level);
+      this.updateCurrentScore(user.user.id, correct, this.state.level);
     }
     const scoreResult = `You score is ${correct} of total ${total}`;
     this.setState({
@@ -172,7 +172,7 @@ class QuizComponent extends React.Component {
     } else {
       data.current_n4_score = String(score);
     }
-    axios.put(`${env.apiEndPoint}/players/${id}`, data)
+    axios.put(`${env.apiEndPoint}/users/${id}`, data)
       .then(() => { })
       .catch(err => console.error(err))
   }

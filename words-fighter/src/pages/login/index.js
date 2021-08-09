@@ -29,8 +29,8 @@ class Login extends Component {
     this.setState({ open: true });
     event.preventDefault();
     try {
-      axios.post(env.apiEndPoint + '/player_login', {
-        name: this.state.name,
+      axios.post(env.apiEndPoint + '/auth/local', {
+        identifier: this.state.name,
         password: this.state.password,
       }).then(response => {
         if (response.status === 200) {
@@ -69,12 +69,14 @@ class Login extends Component {
         </div>
         <form onSubmit={this.singup} className="form">
           <div className="name-wrap">
-            <input className="input" name="name" value={this.state.name} placeholder="Name" onChange={this.handleChange}></input>
+            <input className="input" name="name" value={this.state.name} placeholder="Name or Email" onChange={this.handleChange}></input>
           </div>
           <div className="password-wrap">
             <input className="input" type="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChange}></input>
           </div>
           <button className="text-center" disabled={(this.state.name.length === 0 || this.state.password.length === 0)}>Login</button>
+          
+          <Link to="/signup" className="text-center">Create New One?</Link>
           <Link to="/forget-password" className="text-center">Forget your password?</Link>
           <span className="text-center">OR</span>
           <Link onClick={this.loginInAsGuest} to="/top" className="text-center">

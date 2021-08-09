@@ -22,22 +22,33 @@ class Signup extends Component {
       isNameValid: true,
       isPassValid: true,
       success: false,
-      isExit: false
+      isExit: false,
+      playerRoleId: 1,
     }
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.singup = this.singup.bind(this);
-    this.handleChangeUser = this.handleChangeUser.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   singup(event) {
     this.setState({ open: true });
     event.preventDefault();
-    axios.post(env.apiEndPoint + '/players', {
-      name: this.state.name,
-      password: this.state.password
+    axios.post(env.apiEndPoint + '/auth/local/register', {
+      username: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      confirmed: true,
+      blocked: false,
+      provider: "local",
     }).then(() => {
       this.setState({ success: true })
     }).catch(err => console.error(err))
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
   }
 
   handleChangePassword(event) {
@@ -49,28 +60,28 @@ class Signup extends Component {
     }
   }
 
-  handleChangeUser = (event) => {
-    if (event.target.value.length >= 4 && this.state.name.length > 0) {
-      this.setState({ isNameValid: true })
-    } else {
-      this.setState({ isNameValid: false })
-    }
-    this.setState({ name: event.target.name === 'name' ? event.target.value : this.state.name })
-    axios.get(env.apiEndPoint + '/players', {
-      params: {
-        name: event.target.value
-      }
-    })
-      .then((response) => response)
-      .then((data) => {
-        if (data && data.data.length > 0) {
-          this.setState({ isExit: true })
-        } else {
-          this.setState({ isExit: false })
-        }
-      })
-      .catch((error) => console.error(error));
-  }
+  // handleChangeUser = (event) => {
+  //   if (event.target.value.length >= 4 && this.state.name.length > 0) {
+  //     this.setState({ isNameValid: true })
+  //   } else {
+  //     this.setState({ isNameValid: false })
+  //   }
+  //   this.setState({ name: event.target.name === 'name' ? event.target.value : this.state.name })
+  //   axios.get(env.apiEndPoint + '/players', {
+  //     params: {
+  //       name: event.target.value
+  //     }
+  //   })
+  //     .then((response) => response)
+  //     .then((data) => {
+  //       if (data && data.data.length > 0) {
+  //         this.setState({ isExit: true })
+  //       } else {
+  //         this.setState({ isExit: false })
+  //       }
+  //     })
+  //     .catch((error) => console.error(error));
+  // }
 
   render() {
     let classname = this.state.isExit === true || this.state.isNameValid === false ? 'error-input' : 'input';
@@ -79,16 +90,19 @@ class Signup extends Component {
     return (
       <div className="signup">
         <div className="img-bg clearFix">
-          <p className="upper">A new Language is a New Life 
-          <span className="under_text">新しい言語は新しい人生の始まり</span>
+          <p className="upper">A new Language is a New Life
+            <span className="under_text">新しい言語は新しい人生の始まり</span>
           </p>
           <img className="img" alt="decorate" src={halfBg}></img>
         </div>
         <form onSubmit={this.singup} className="form">
           <div className="name-wrap">
-            <input className={classname} name='name' value={this.state.name} placeholder="Name" onChange={this.handleChangeUser}></input>
+            <input className={classname} name='name' value={this.state.name} placeholder="Name" onChange={this.handleChange}></input>
             {this.state.isExit === true && <span className="err_text">username is already taken</span>}
             {this.state.isExit === false && this.state.isNameValid === false && <span className="err_text">username must be at least 4 charaters long</span>}
+          </div>
+          <div className="name-wrap">
+            <input className={classname} name='email' value={this.state.email} placeholder="Email" onChange={this.handleChange}></input>
           </div>
           <div className="password-wrap">
             <input className={classname02} type="password" name="password" value={this.state.password} placeholder="Password" onChange={this.handleChangePassword}></input>

@@ -30,7 +30,7 @@ export default function ScoreDetail(props) {
       const apiMode = routeParas.mode === 'exam' ? '/exam-scores' : '/practise-scores';
       const apiPara = {
         level: routeParas.level,
-        player: routeParas.playerId,
+        user: routeParas.playerId,
         _sort: 'answer_date:DESC'
       };
       axios.get(env.apiEndPoint + apiMode, { params: apiPara })

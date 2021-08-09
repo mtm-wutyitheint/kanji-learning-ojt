@@ -6,6 +6,7 @@ import { env } from '../../env/development';
 import QuizComponent from '../../components/quiz-component/quiz-component';
 import qs from 'qs';
 import Select from 'react-select';
+import TopScorers from '../../components/top-scorer/top-scores';
 
 const checkBoxItems = [
   { name: "Answer with meaning", value: "answerWithMeaning" },
@@ -244,6 +245,7 @@ class Quiz extends React.Component {
     return (
       <div className="quiz">
         <div className="main">
+          <TopScorers></TopScorers>
           <h1 className="head">Quiz for {this.state.level}</h1>
           {this.state.showForm &&
             <form className="form">

@@ -39,7 +39,7 @@ class ScoreResult extends React.Component {
       data: showItem,
       showMore: true,
       showMoreRoute: route,
-      playerId: loginUser.id
+      playerId: loginUser.user.id
     })
   }
 

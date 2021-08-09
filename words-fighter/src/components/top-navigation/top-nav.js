@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import './top-nav.scss';
 import kanji from '../../img/kanji.png';
+import { isNil } from 'lodash';
 
 export default function TopNav() {
   const [auth, setAuth] = React.useState(true);
@@ -18,9 +19,7 @@ export default function TopNav() {
 
   const currentLoginUser = () => {
     const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-    if (!loginUser || loginUser.status !== 'success' ||
-      !('name' in loginUser) || !('id' in loginUser) ||
-      !loginUser.name || !loginUser.id) {
+    if (isNil(loginUser) || isNil(loginUser.jwt) || isNil(loginUser.user)) {
       setAuth(false);
     } else {
       setAuth(true);
@@ -61,39 +60,43 @@ export default function TopNav() {
           </Typography>
           <div>
             <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                {auth &&
-                  <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                }
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
+              {auth ?
+                <>
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+
+                  </Menu>
+                </> :
+                <Link to="signup">Sign Up</Link>
+              }
             </div>
           </div>
         </Toolbar>
       </AppBar>
-    </div>
+    </div >
   );
 }

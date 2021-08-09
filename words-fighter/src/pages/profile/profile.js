@@ -35,14 +35,14 @@ class Profile extends React.Component {
     let practiseN5 = [];
     let practiseN4 = [];
     const loginUser = JSON.parse(localStorage.getItem('loginUser'));
-    if (loginUser && loginUser.id && loginUser.id !== 'guest') {
+    if (loginUser && loginUser.user && loginUser.user.id && loginUser.id !== 'guest') {
       this.setState({ isGuest: false });
-      axios.get(env.apiEndPoint + '/players/' + loginUser.id)
+      axios.get(env.apiEndPoint + '/users/' + loginUser.user.id)
         .then(response => {
           const player = response.data;
           this.setState({
             id: player.id,
-            name: player.name,
+            name: player.username,
             n5Score: player.current_n5_score,
             n4Score: player.current_n4_score,
             examRecord: player.exam_scores,
@@ -116,7 +116,7 @@ class Profile extends React.Component {
 
   updateProfile(data, id) {
     if (!this.state.isGuest) {
-      axios.put(env.apiEndPoint + '/players/' + id, data)
+      axios.put(env.apiEndPoint + '/user/' + id, data)
         .then(() => {
           this.setState({
             id: 0,
@@ -143,12 +143,12 @@ class Profile extends React.Component {
     const user = _.cloneDeep(this.state);
     const userId = this.state.id;
     let data = {};
-    if (user.name) {
-      data.name = user.name;
-    }
-    if (user.password) {
-      data.password = user.password;
-    }
+    // if (user.name) {
+    //   data.name = user.name;
+    // }
+    // if (user.password) {
+    //   data.password = user.password;
+    // }
     if (user.profilePicture) {
       const body = new FormData();
       body.append('data', JSON.stringify(data));

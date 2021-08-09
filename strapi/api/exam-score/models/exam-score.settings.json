@@ -35,6 +35,11 @@
         "N4"
       ],
       "required": true
+    },
+    "user": {
+      "via": "exam_scores",
+      "plugin": "users-permissions",
+      "model": "user"
     }
   }
 }
