@@ -50,16 +50,26 @@ export default function TopNav() {
     setAnchorEl(null);
   }
 
+  function setLevel(level) {
+    localStorage.setItem('level', level );
+  }
+
   return (
     <div className="root">
       {auth && (
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6" className="title">
-              <Link to="/top">
-                <img className="top-image" src={kanji} alt={'top'}></img>
-              </Link>
-            </Typography>
+            <div className="nav-list title">
+              <a className="space-between" href="/top">Top</a>
+              <div className="dropdown">
+                <button className="dropbtn">Content</button>
+                <div className="dropdown-content">
+                  <a href="/content" onClick={() => setLevel('N4')}>N4</a>
+                  <a href="/content" onClick={() => setLevel('N5')}>N5</a>
+                </div>
+              </div> 
+              <a className="space-between" href="/comming-soon">Game</a>
+            </div>
             <div>
               <div>
                 <IconButton
