@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import { env } from '../../env/development';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -8,6 +10,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 
 import halfBg from '../../img/aa.png';
+
 
 class ForgetPassword extends React.Component {
   constructor() {
@@ -25,7 +28,16 @@ class ForgetPassword extends React.Component {
   }
   resetPassword(event) {
     event.preventDefault();
-    this.setState({ open: true, success: true });
+    this.setState({ open: true });
+    const resetMail = this.state.email;
+    axios.post(`${env.apiEndPoint}/auth/forgot-password`, { email: resetMail })
+      .then(res => {
+        this.setState({ success: true });
+        console.log('reset password OK ', res);
+      }).catch(err => {
+        this.setState({success: false});
+        console.error(err);
+      })
   }
   handleChange(event) {
     this.setState({

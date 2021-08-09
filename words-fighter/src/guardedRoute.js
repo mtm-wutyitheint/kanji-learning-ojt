@@ -12,7 +12,7 @@ const GuardedRoute = ({ component: Component, auth, ...rest }) => (
 const isAuth = () => {
   let loginUser = JSON.parse(localStorage.getItem('loginUser'));
 
-  if(loginUser.id === 'guest') {
+  if(loginUser && loginUser.id === 'guest') {
     return true;
   }
 
