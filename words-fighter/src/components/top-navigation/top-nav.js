@@ -4,11 +4,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { Link, useHistory } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
 import Toolbar from '@material-ui/core/Toolbar';
 import './top-nav.scss';
-import kanji from '../../img/kanji.png';
 
 export default function TopNav() {
   const [auth, setAuth] = React.useState(true);
