@@ -15,12 +15,17 @@ import Signup from "./pages/signup";
 import Profile from "./pages/profile/profile";
 import Top from './pages/top/top';
 import TopNav from "./components/top-navigation/top-nav";
+import ScoreDetail from "./pages/score-detail/score-detail";
+import ForgetPassword from "./pages/forget-password/forget-password";
+import ResetPassword from "./pages/reset-password/reset-password";
 
 function App() {
   const LoginContainer = () => (
     <div className="container">
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
+      <Route path="/forget-password" component={ForgetPassword}></Route>
+      <Route path="/reset-password" component={ResetPassword}></Route>
       <Route exact path="/" render={() => <Redirect to="/top" />} />
     </div>
   )
@@ -35,6 +40,7 @@ function App() {
         <GuardedRoute path="/learn" component={Learn} />
         <GuardedRoute path="/quiz" component={Quiz} />
         <GuardedRoute path="/profile" component={Profile} />
+        <GuardedRoute path="/score-detail" component={ScoreDetail}></GuardedRoute>
       </div>
     </div>
   )

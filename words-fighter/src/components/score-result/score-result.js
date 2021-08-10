@@ -1,19 +1,45 @@
 import React from 'react';
 import './score-result.scss';
+import _ from "lodash";
+import { Link } from 'react-router-dom'
 
 class ScoreResult extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      mode: ''
+      mode: null,
+      showMore: false,
+      level: null,
+      showMoreRoute: '',
+      playerId: 0
     }
   }
 
   componentDidMount() {
     this.setState({
       data: this.props.data,
-      mode: this.props.mode
+      mode: this.props.mode,
+      level: this.props.level
+    });
+  }
+
+  componentDidUpdate() {
+    if (this.state.data.length > 5) {
+      this.setShowMore();
+    }
+  }
+
+  setShowMore() {
+    const stateClone = _.cloneDeep(this.state.data);
+    const showItem = _.slice(stateClone, 0, 5);
+    const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+    const route = '/score-detail';
+    this.setState({
+      data: showItem,
+      showMore: true,
+      showMoreRoute: route,
+      playerId: loginUser.user.id
     })
   }
 
@@ -84,6 +110,21 @@ class ScoreResult extends React.Component {
               })}
             </tbody>
           </table>
+        }
+
+        {this.state.showMore &&
+          <Link
+            className="show-more-link"
+            to={{
+              pathname: this.state.showMoreRoute,
+              state: {
+                level: this.state.level,
+                mode: this.state.mode,
+                playerId: this.state.playerId
+              }
+            }}>
+            <button className="show-more-btn">Show More</button>
+          </Link>
         }
       </div>
     )
