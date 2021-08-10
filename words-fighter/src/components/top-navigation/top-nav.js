@@ -5,10 +5,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link, useHistory } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import './top-nav.scss';
-import kanji from '../../img/kanji.png';
 import { isNil } from 'lodash';
 
 export default function TopNav() {
@@ -49,54 +47,62 @@ export default function TopNav() {
     setAnchorEl(null);
   }
 
+  function setLevel(level) {
+    localStorage.setItem('level', level);
+  }
+
   return (
     <div className="root">
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className="title">
-            <Link to="/top">
-              <img className="top-image" src={kanji} alt={'top'}></img>
-            </Link>
-          </Typography>
-          <div>
-            <div>
-              {auth ?
-                <>
-                  <IconButton
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleMenu}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-
-                  </Menu>
-                </> :
-                <Link to="signup">Sign Up</Link>
-              }
+          <div className="nav-list title">
+            <a className="space-between" href="/top">Top</a>
+            <div className="dropdown">
+              <button className="dropbtn">Content</button>
+              <div className="dropdown-content">
+                <a href="/content" onClick={() => setLevel('N4')}>N4</a>
+                <a href="/content" onClick={() => setLevel('N5')}>N5</a>
+              </div>
             </div>
+            <a className="space-between" href="/comming-soon">Game</a>
+          </div>
+          <div>
+            {auth ?
+              <>
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+
+                </Menu>
+              </> :
+              <Link to="signup">Sign Up</Link>
+            }
           </div>
         </Toolbar>
       </AppBar>
     </div >
-  );
+  )
 }
