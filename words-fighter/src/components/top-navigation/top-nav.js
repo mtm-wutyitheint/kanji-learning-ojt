@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Toolbar from '@material-ui/core/Toolbar';
 import './top-nav.scss';
 import { isNil } from 'lodash';
@@ -65,9 +65,12 @@ export default function TopNav() {
               </div>
             </div>
             <a className="space-between" href="/comming-soon">Game</a>
+            {!auth &&
+              <a className="space-between" href="/signup">Sign up</a>
+            }
           </div>
           <div>
-            {auth ?
+            {auth &&
               <>
                 <IconButton
                   aria-label="account of current user"
@@ -97,8 +100,7 @@ export default function TopNav() {
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
 
                 </Menu>
-              </> :
-              <Link to="signup">Sign Up</Link>
+              </>
             }
           </div>
         </Toolbar>

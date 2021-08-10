@@ -83,10 +83,12 @@
       "via": "user"
     },
     "current_n5_score": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0
     },
     "current_n4_score": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0
     }
   }
 }
