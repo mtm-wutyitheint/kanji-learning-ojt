@@ -19,7 +19,7 @@ class Login extends Component {
       open: false,
       setOpen: false,
       pending: true,
-      success: false
+      success: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.singup = this.singup.bind(this);
@@ -73,8 +73,7 @@ class Login extends Component {
     let alertTitle;
     if (this.state.pending) {
       alertTitle = "Please wait! Login is Processing...";
-    }
-    if (this.state.success) {
+    } else if (this.state.success) {
       alertTitle = "Login Sucess!";
     } else {
       alertTitle = "Login Failed! Please Try again...";
