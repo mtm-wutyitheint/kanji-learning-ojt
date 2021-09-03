@@ -53,58 +53,60 @@ export default function TopNav() {
 
   return (
     <div className="root">
-      <AppBar position="static">
-        <Toolbar>
-          <div className="nav-list title">
-            <a className="space-between" href="/top">Top</a>
-            <div className="dropdown">
-              <button className="dropbtn">Content</button>
-              <div className="dropdown-content">
-                <a href="/content" onClick={() => setLevel('N4')}>N4</a>
-                <a href="/content" onClick={() => setLevel('N5')}>N5</a>
+      {auth && (
+        <AppBar position="static">
+          <Toolbar>
+            <div className="nav-list title">
+              <a className="space-between" href="/top">Top</a>
+              <div className="dropdown">
+                <button className="dropbtn">Content</button>
+                <div className="dropdown-content">
+                  <a href="/content" onClick={() => setLevel('N4')}>N4</a>
+                  <a href="/content" onClick={() => setLevel('N5')}>N5</a>
+                </div>
               </div>
+              <a className="space-between" href="/comming-soon">Game</a>
+              {!auth &&
+                <a className="space-between" href="/signup">Sign up</a>
+              }
             </div>
-            <a className="space-between" href="/comming-soon">Game</a>
-            {!auth &&
-              <a className="space-between" href="/signup">Sign up</a>
-            }
-          </div>
-          <div>
-            {auth &&
-              <>
-                <IconButton
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <div>
+              {auth &&
+                <>
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
 
-                </Menu>
-              </>
-            }
-          </div>
-        </Toolbar>
-      </AppBar>
+                  </Menu>
+                </>
+              }
+            </div>
+          </Toolbar>
+        </AppBar>
+      )}
     </div >
   )
 }
