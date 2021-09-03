@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import Pagination from "./Pagination";
 import axios from 'axios';
 import { env } from '../../env/development';
+import { repeat } from 'lodash';
 
 const defaultProps = {
   data: [],
@@ -82,15 +83,19 @@ class Learn extends React.Component {
         <h2 className="chapter">Chapter {this.state.currentChapter}</h2>
         <div className="container clearFix">
           {this.state.pageOfItems.map((words) => {
+            const imgUrl = env.apiEndPoint + words.logoPicture?.formats.thumbnail.url;
             return (
               <div
+              style={{ 
+                background: `url(${imgUrl}) white no-repeat right` 
+              }}
                 onClick={() => this.openDialog(words.id)}
                 key={words.id}
                 className="block clearFix">
                 <div className="mean">
                   <span className="kanji">{words.kanji}</span>
                   ({words.kunRomaji}) = {words.meaning}</div>
-                <img className="logo" src={kanjiPic} alt="kanji logo"></img>
+                {/* <img className="logo" src={words.logoPicture ? imgUrl : kanjiPic} alt="kanji logo"></img> */}
               </div>
             )
           })}

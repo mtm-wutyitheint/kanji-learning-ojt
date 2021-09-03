@@ -8,6 +8,7 @@ import Slide from '@material-ui/core/Slide';
 import kanjiPic from '../../img/kanji.png';
 import './kanji-detail-dialog.scss';
 import _, { isNil } from 'lodash';
+import { env } from '../../env/development';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -17,7 +18,9 @@ export default function KanjiDetail(props) {
   const [kanjiItem, setKanjiItem] = React.useState(null);
   const [currentIndex, setCurrentIndex] = React.useState(null);
   const { open, close, data, index } = props;
-
+  console.log(kanjiItem)
+  const imgUrl = env.apiEndPoint + kanjiItem?.logoPicture.formats.thumbnail.url;
+console.log(imgUrl)
   const setCurrent = () => {
     if (!isNil(currentIndex)) {
       setCurrentIndex(currentIndex);
@@ -76,7 +79,7 @@ export default function KanjiDetail(props) {
           <DialogTitle id="alert-dialog-slide-title">{kanjiItem.kanji} [ {kanjiItem.kunRomaji} ]</DialogTitle>
           <DialogContent>
             <div className="clearFix">
-              <img className="kanji-example" src={kanjiPic} alt={kanjiItem.kunRomaji}></img>
+              <img className="kanji-example" src={ kanjiItem?.logoPicture ? imgUrl : kanjiPic} alt={kanjiItem.kunRomaji}></img>
               <ul className="meaning-lst">
                 <li>Meaning</li>
                 <ul>
